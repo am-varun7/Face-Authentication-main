@@ -1,0 +1,169 @@
+/* Auth Container */
+.auth-container {
+    background-image: url('../images/authenticatebg.avif'); /* Full background image */
+    background-size: cover; /* Ensure background covers the full screen */
+    background-position: center center; /* Center the background */
+    background-attachment: fixed; /* Keep the background fixed */
+    height: 100vh; /* Full viewport height */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: #fff; /* White text for readability */
+    padding: 20px;
+}
+
+/* Authentication Heading */
+.auth-heading {
+    font-size: 2.5rem;
+    font-weight: 600;
+    color: #fff;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 20px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Card Styling */
+.auth-card {
+    background-color: rgba(0, 0, 0, 0.4); /* Darker background for contrast */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); /* Added semicolon here */
+    border-radius: 12px;
+    width: 100%;
+    max-width: 600px; /* Max width of card */
+    padding: 30px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+
+/* Card Body */
+.auth-card-body {
+    width: 100%;
+}
+
+/* Video Container */
+.video-container {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+/* Video Element Styling */
+.auth-video {
+    border-radius: 10px;
+    border: 2px solid #ddd;
+}
+
+/* Button Styling */
+.auth-buttons {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    width: 100%;
+}
+
+.auth-btn {
+    padding: 12px 20px;
+    font-size: 1.1rem;
+    border-radius: 30px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    width: 48%;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    text-align: center;
+}
+
+.auth-btn:hover {
+    transform: translateY(-2px); /* Slight hover effect */
+}
+
+.auth-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.auth-btn-success {
+    background-color: #28a745;
+    color: #fff;
+}
+
+.auth-btn-danger {
+    background-color: #dc3545;
+    color: #fff;
+}
+
+/* Identified Person Name */
+.auth-identified-name {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: #007bff; /* Modern blue color for names */
+    margin-top: 20px;
+}
+
+/* Message Styling */
+.auth-message {
+    font-size: 1rem;
+    color: #333;
+    margin-top: 15px;
+}
+
+/* Identified Persons Section */
+.identified-persons {
+    margin-top: 20px;
+    width: 100%;
+}
+
+.identified-persons-heading {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.identified-persons-list {
+    padding: 0;
+    margin-top: 10px;
+    list-style: none;
+}
+
+.identified-person-item {
+    display: flex;
+    align-items: center;
+    padding: 12px;
+    border-bottom: 1px solid #ddd;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    margin-bottom: 10px;
+}
+
+.identified-person-image {
+    width: 45px;
+    height: 45px;
+    margin-right: 10px;
+    border: 3px solid #007bff;
+    border-radius: 50%;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .auth-heading {
+        font-size: 2rem; /* Slightly smaller heading on mobile */
+    }
+
+    .auth-card {
+        padding: 20px; /* Less padding on small screens */
+        max-width: 100%;
+    }
+
+    .auth-btn {
+        font-size: 1rem; /* Smaller buttons */
+        padding: 10px 15px;
+    }
+
+    .auth-identified-name {
+        font-size: 1.1rem; /* Smaller font size for names */
+    }
+}
