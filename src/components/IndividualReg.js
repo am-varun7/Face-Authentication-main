@@ -1,9 +1,12 @@
 import React, { useRef, useState, useEffect } from "react";
-import './IndividualReg.css'
+import { useNavigate } from "react-router-dom";
+import './IndividualReg.css';
+
 const IndividualReg = () => {
     const videoRef = useRef(null);
+    const navigate = useNavigate(); // Initialize navigate hook
     const [isRegistering, setIsRegistering] = useState(false);
-    const [capturedFrames, setCapturedFrames] = useState([]);
+    const  setCapturedFrames = useState([]);
     const [frameCount, setFrameCount] = useState(0);
     const [status, setStatus] = useState("");
     const [name, setName] = useState("");
@@ -61,7 +64,7 @@ const IndividualReg = () => {
 
         const captureInterval = setInterval(async () => {
             if (frameCounter < 10) {
-                const frame = await captureFrame();
+                const frame = await captureFrame();  // Call captureFrame instead of captureFrames
                 if (frame) {
                     try {
                         const response = await fetch("http://localhost:5001/generate-embedding", {
@@ -90,7 +93,7 @@ const IndividualReg = () => {
                 stopVideo();
                 sendEmbeddingsToBackend(embeddings);
             }
-        }, 1000); 
+        }, 1000); // Capture frames every second
     };
 
     // Send captured embeddings to the Node.js backend
@@ -135,8 +138,16 @@ const IndividualReg = () => {
         };
     }, []);
 
+    // Back button handler
+    const handleBack = () => {
+        navigate("/"); // Navigate back to the dashboard
+    };
+
     return (
         <div className="register-container">
+            <button onClick={handleBack} className="back-button">
+                &lt; Back
+            </button>
             <h1 className="register-heading">Register Face</h1>
             <div className="register-card">
                 <div className="register-card-body">

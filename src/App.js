@@ -11,7 +11,7 @@ import AuthenticationCard from './components/AuthenticationCard';
 
 function App() {
   const [alert, setAlert] = useState(null)
-  const [isLoggedIn, setIsLoggedIn]=  useState(false)
+  const setIsLoggedIn=  useState(false)
   const showAlert = (message,type) =>{
     setAlert({
       msg: message,
@@ -34,6 +34,7 @@ function App() {
     <BrowserRouter>
     <Alert alert = {alert} />
     {/* { window.location.pathname !== '/signup' && window.location.pathname !== '/login'&& <Navbar />} */}
+
     <Routes>
       <Route path='/signup' element={<Signup showAlert={showAlert}/>}/>
       <Route path='/login' element={<Login showAlert={showAlert} onLogin={handleLogin}/>}/>

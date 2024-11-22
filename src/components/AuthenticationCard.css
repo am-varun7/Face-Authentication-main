@@ -15,14 +15,19 @@
 
 /* Authentication Heading */
 .auth-heading {
-    font-size: 2.5rem;
-    font-weight: 600;
-    color: #fff;
-    text-align: center;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    margin-bottom: 20px;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 1.4rem; /* Slightly larger for better visibility */
+    font-weight: 600; /* Medium weight for stronger emphasis */
+    color: #fff; /* Light text color for contrast */
+    text-align: center; /* Center the heading */
+    text-transform: uppercase; /* Uppercase for a formal label effect */
+    letter-spacing: 2px; /* Spacing for more distinct separation */
+    background-color: rgba(0, 0, 0, 0.7); /* Dark background behind heading */
+    padding: 12px 20px; /* Add padding to make it stand out */
+    border-radius: 25px; /* Rounded corners */
+    margin-bottom: 20px; /* Add margin below to separate from the card */
+    width: 80%; /* Make it responsive */
+    max-width: 300px; /* Limit the width for better alignment */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Soft shadow for emphasis */
 }
 
 /* Card Styling */
@@ -99,14 +104,14 @@
 .auth-identified-name {
     font-size: 1.3rem;
     font-weight: 600;
-    color: #007bff; /* Modern blue color for names */
+    color: #28a745; /* Change color to green (or use any color you prefer) */
     margin-top: 20px;
 }
 
 /* Message Styling */
 .auth-message {
     font-size: 1rem;
-    color: #333;
+    color: #ffffff;
     margin-top: 15px;
 }
 
@@ -119,7 +124,7 @@
 .identified-persons-heading {
     font-size: 1.3rem;
     font-weight: 600;
-    color: #333;
+    color: #28a745;
     margin-bottom: 10px;
 }
 
@@ -137,6 +142,7 @@
     background-color: #f9f9f9;
     border-radius: 10px;
     margin-bottom: 10px;
+    color: black;
 }
 
 .identified-person-image {
@@ -146,6 +152,34 @@
     border: 3px solid #007bff;
     border-radius: 50%;
 }
+.auth-btn-info {
+    background-color: #50d1f8; /* Light blue */
+    /* border-color: #46; */
+}  
+.back-button {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    background-color: #ff6200; /* Blue background */
+    color: white; /* White text */
+    border: none; /* Matching border color */
+    border-radius: 30px; /* Rounded corners */
+    font-size: 16px;
+    padding: 8px 16px; /* Padding for better spacing */
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease; /* Smooth transition on hover */
+  }
+  
+  .back-button:hover {
+    background-color: #e05a00;
+    transform: translateY(-3px); /* Slight scale effect on hover */
+  }
+  
+  .back-button:focus {
+    outline: none; /* Remove default focus outline */
+  }
+  
+  
 
 /* Responsive Design */
 @media (max-width: 768px) {
