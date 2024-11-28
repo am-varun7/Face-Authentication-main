@@ -36,28 +36,47 @@ const Login = (props) => {
 
     return (
         <>
-        <div className='video-background'>
-            <video autoPlay muted loop id='background-video'><source src={Backgroundvideo} type='video/mp4'/>Your browser does not support video tag</video>
+        <div className="video-background">
+            <video autoPlay muted loop id="background-video">
+                <source src={Backgroundvideo} type="video/mp4" />
+                Your browser does not support the video tag.
+            </video>
         </div>
-        <div className='container mx-10 my-5'>
-            <h1>Login</h1>
+        <div className="login-container">
+            <h1 className="login-heading" style={{fontFamily: 'Orbitron'}}>FaceRecs</h1>
             <form onSubmit={handleSubmit}>
-                <div className="mb-3">
+                <div className="form-group">
                     <label htmlFor="email" className="form-label">Email address</label>
-                    <input type="email" className="form-control" id="email" onChange={onChange} value={credentials.email} name='email' aria-describedby="emailHelp" />
-                    <div id="emailHelp" className="form-text">We'll never share your email with anyone else.</div>
+                    <input
+                        type="email"
+                        className="form-input"
+                        id="email"
+                        name="email"
+                        onChange={onChange}
+                        value={credentials.email}
+                        aria-describedby="emailHelp"
+                    />
+                    <small id="emailHelp" className="form-text">We'll never share your email with anyone else.</small>
                 </div>
-                <div className="mb-3">
+                <div className="form-group">
                     <label htmlFor="password" className="form-label">Password</label>
-                    <input type="password" className="form-control" name="password" onChange={onChange} value={credentials.password} id="password" />
+                    <input
+                        type="password"
+                        className="form-input"
+                        id="password"
+                        name="password"
+                        onChange={onChange}
+                        value={credentials.password}
+                    />
                 </div>
-
-                <button type="submit" className="btn btn-primary" >Login</button>
+                <button type="submit" className="btn">Login</button>
             </form>
-            <br/>
-           <p style={{textAlign: 'center'}}> Don't have an account? <Link to='/signup'>Signup</Link> </p>
+            <p className="signup-text">
+                Don't have an account? <Link to="/signup" className="signup-link">Signup</Link>
+            </p>
         </div>
-        </>
+    </>
+        
     )
 }
 

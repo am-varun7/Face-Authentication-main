@@ -160,6 +160,7 @@
     position: absolute;
     top: 20px;
     left: 20px;
+    width: 6rem;
     background-color: #ff6200; /* Blue background */
     color: white; /* White text */
     border: none; /* Matching border color */

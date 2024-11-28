@@ -6,7 +6,7 @@ const IndividualReg = () => {
     const videoRef = useRef(null);
     const navigate = useNavigate(); // Initialize navigate hook
     const [isRegistering, setIsRegistering] = useState(false);
-    const  setCapturedFrames = useState([]);
+    const  [capturedFrames,setCapturedFrames] = useState([]);
     const [frameCount, setFrameCount] = useState(0);
     const [status, setStatus] = useState("");
     const [name, setName] = useState("");

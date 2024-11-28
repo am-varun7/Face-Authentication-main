@@ -24,6 +24,7 @@ const Authentication = () => {
     } catch (error) {
       console.error("Error accessing webcam:", error);
       setMessage("Error accessing webcam.");
+      stopVideo(); // Stop the video if an error occurs
     }
   };
 
@@ -66,7 +67,7 @@ const Authentication = () => {
       const data = await response.json();
 
       if (!data.faceDetected) {
-        setMessage("No face detected, please adjust your position.");
+
         setShowRecapture(true); // Show recapture button if no face detected
         return;
       }
@@ -102,17 +103,19 @@ const Authentication = () => {
         });
 
         // Stop the webcam after a person is identified
-        stopVideo(); // Automatically stop authentication after identifying a person
-        setCapturing(false); // Stop the frame capturing loop
-        setShowRecapture(false); // Hide recapture button after successful identification
-        setShowReverify(true); // Show the reverify button after successful authentication
+        stopVideo();
+        setCapturing(false);
+        setShowRecapture(false);
+        setShowReverify(true);
       } else {
-        setMessage("Face detected but not recognized.");
+        setMessage("Authentication failed: Unknown user detected");
         setShowRecapture(true); // Show recapture button if face is detected but not recognized
+        stopVideo(); // Stop the video if the face is not recognized
       }
     } catch (error) {
       console.error("Error during authentication:", error);
       setMessage("Error occurred during authentication.");
+      stopVideo(); // Stop the video on any error
     }
   }, []); // Empty array means this function won't change unless dependencies change
 
@@ -125,38 +128,45 @@ const Authentication = () => {
       }, 1000);
     }
     return () => clearInterval(interval); // Cleanup on unmount
-  }, [capturing, captureFrame]); // Include captureFrame as a dependency
+  }, [capturing, captureFrame]);
+
+  // Stop the video when the component unmounts or the user navigates away
+  useEffect(() => {
+    return () => {
+      stopVideo(); // Cleanup on unmount
+    };
+  }, []);
 
   // Reset states for recapture and reverify
   const handleRecapture = () => {
     setIdentifiedPerson(null);
     setMessage("");
     setPersonsIdentified([]);
-    setShowRecapture(false); // Hide recapture button
-    setShowReverify(false); // Hide reverify button
-    setIsAuthenticating(false); // Reset authentication state
-    startAuthentication(); // Restart the authentication process
+    setShowRecapture(false);
+    setShowReverify(false);
+    setIsAuthenticating(false);
+    startAuthentication();
   };
 
   // Handle reverify process
   const handleReverify = () => {
-    setMessage(""); // Clear message
-    setIdentifiedPerson(null); // Clear identified person
-    setPersonsIdentified([]); // Clear the identified persons list
-    setShowRecapture(false); // Hide recapture button
-    setShowReverify(false); // Hide reverify button
-    setIsAuthenticating(false); // Reset the authentication state
-    startAuthentication(); // Restart the authentication process
+    setMessage("");
+    setIdentifiedPerson(null);
+    setPersonsIdentified([]);
+    setShowRecapture(false);
+    setShowReverify(false);
+    setIsAuthenticating(false);
+    startAuthentication();
   };
 
   // Handle Back Button Click
   const handleBack = () => {
+    stopVideo(); // Ensure video stops when navigating back
     navigate("/"); // Navigate back to the dashboard
   };
 
   return (
     <div className="auth-container">
-      {/* Back button at the top left */}
       <button onClick={handleBack} className="back-button">
         &lt; Back
       </button>
@@ -204,7 +214,6 @@ const Authentication = () => {
           </h3>
           <p className="auth-message">{message}</p>
 
-          {/* List of identified persons */}
           {personsIdentified.length > 0 && (
             <div className="identified-persons">
               <h3 className="identified-persons-heading mt-4">

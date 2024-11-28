@@ -7,6 +7,10 @@ import Alert from './components/Alert';
 import Dashboard from './components/Dashboard';
 import IndividualReg  from './components/IndividualReg';
 import AuthenticationCard from './components/AuthenticationCard';
+import AuthenticationCardCNN from './components/AuthenticationCardCNN';
+import IndividualRegCNN from './components/IndividualRegCNN';
+import Groupauthenticate from './components/Groupauthentication';
+
 
 
 function App() {
@@ -40,7 +44,10 @@ function App() {
       <Route path='/login' element={<Login showAlert={showAlert} onLogin={handleLogin}/>}/>
       <Route path='/' element={<Dashboard />}/>
       <Route path='/individualregistration' element={<IndividualReg/>}/>
+      <Route path='/individualregistrationcnn' element={<IndividualRegCNN/>}/>
       <Route path='/individualauthentication' element={<AuthenticationCard/>}/>
+      <Route path='/individualauthenticationcnn' element={<AuthenticationCardCNN/>}/>
+      <Route path='/groupauthentication' element={<Groupauthenticate/>}/>
     </Routes>
     </BrowserRouter>
     
