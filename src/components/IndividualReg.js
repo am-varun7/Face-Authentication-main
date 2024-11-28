@@ -140,7 +140,7 @@ const IndividualReg = () => {
 
     // Back button handler
     const handleBack = () => {
-        navigate("/"); // Navigate back to the dashboard
+        navigate("/Dashboard"); // Navigate back to the dashboard
     };
 
     return (

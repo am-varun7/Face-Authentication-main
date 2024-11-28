@@ -9,7 +9,7 @@ const Login = (props) => {
     let navigate = useNavigate();
     const handleSubmit= async (e)=>{
         e.preventDefault()
-        const success = true; // Assume login was successful
+        
         const response = await fetch('http://localhost:5000/api/auth/login', {
             method : 'POST',
             headers: {
@@ -24,7 +24,7 @@ const Login = (props) => {
             //Save the token and redirect
             localStorage.setItem('token', json.authToken);
             props.showAlert("Logged in Successfully", "success")
-            navigate('/')
+            navigate('/Dashboard')
         }else{
             props.showAlert("Invalid Credentials", "danger")
         }
@@ -72,7 +72,7 @@ const Login = (props) => {
                 <button type="submit" className="btn">Login</button>
             </form>
             <p className="signup-text">
-                Don't have an account? <Link to="/signup" className="signup-link">Signup</Link>
+                Don't have an account? <Link to="/" className="signup-link">Signup</Link>
             </p>
         </div>
     </>

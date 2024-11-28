@@ -78,7 +78,6 @@ const Dashboard = () => {
                         </p>
                         <div className="cta-buttons">
                             <button className="home-button" onClick={handleLearnMore}>Learn More</button>
-                            <button className="home-button" onClick={handleIndiRegister}>Get Started</button>
                         </div>
                     </div>
                 </div>

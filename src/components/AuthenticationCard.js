@@ -162,7 +162,7 @@ const Authentication = () => {
   // Handle Back Button Click
   const handleBack = () => {
     stopVideo(); // Ensure video stops when navigating back
-    navigate("/"); // Navigate back to the dashboard
+    navigate("/Dashboard"); // Navigate back to the dashboard
   };
 
   return (

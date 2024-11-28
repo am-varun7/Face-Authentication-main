@@ -150,7 +150,7 @@ function Groupauthenticate(){
 
   // Handle Back Button Click
   const handleBack = () => {
-    navigate("/"); // Navigate back to the dashboard
+    navigate("/Dashboard"); // Navigate back to the dashboard
   };
     return(
         <>

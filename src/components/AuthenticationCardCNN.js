@@ -149,7 +149,7 @@ const AuthenticationCardCNN = () => {
 
     const handleBack = () => {
         stopVideo();
-        navigate("/");
+        navigate("/Dashboard");
     };
 
     return (
