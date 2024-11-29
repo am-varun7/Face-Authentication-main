@@ -1,204 +1,240 @@
-/* Auth Container */
-.auth-container {
-    background-image: url('../images/authenticatebg.avif'); /* Full background image */
-    background-size: cover; /* Ensure background covers the full screen */
-    background-position: center center; /* Center the background */
-    background-attachment: fixed; /* Keep the background fixed */
-    height: 100vh; /* Full viewport height */
+
+  .auth-container {
     display: flex;
     flex-direction: column;
-    justify-content: center;
     align-items: center;
-    color: #fff; /* White text for readability */
+    justify-content: center;
+    height: 100vh;
+    background-image: url('../images/authenticatebg.avif');
+    background-size: cover;
+    background-position: center center;
+    color: #fff;
     padding: 20px;
-}
-
-/* Authentication Heading */
-.auth-heading {
-    font-size: 1.4rem; /* Slightly larger for better visibility */
+  }
+  
+  /* Authentication Heading */
+  .auth-heading {
+    font-size: 1.5rem; /* Slightly larger for better visibility */
     font-weight: 600; /* Medium weight for stronger emphasis */
     color: #fff; /* Light text color for contrast */
     text-align: center; /* Center the heading */
     text-transform: uppercase; /* Uppercase for a formal label effect */
-    letter-spacing: 2px; /* Spacing for more distinct separation */
+    letter-spacing: 2px; /* Spacing for distinct appearance */
     background-color: rgba(0, 0, 0, 0.7); /* Dark background behind heading */
-    padding: 12px 20px; /* Add padding to make it stand out */
+    padding: 12px 20px; /* Padding for better visibility */
     border-radius: 25px; /* Rounded corners */
-    margin-bottom: 20px; /* Add margin below to separate from the card */
-    width: 80%; /* Make it responsive */
-    max-width: 300px; /* Limit the width for better alignment */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Soft shadow for emphasis */
-}
+    margin-bottom: 20px; /* Separate from the card */
+    width: 80%; /* Responsive width */
+    max-width: 300px; /* Limit the width */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Subtle shadow for emphasis */
+  }
+  
+  /* Card Styling */
+ /* Card Styling */
 
-/* Card Styling */
+  /* Authentication Card */
 .auth-card {
-    background-color: rgba(0, 0, 0, 0.4); /* Darker background for contrast */
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); /* Added semicolon here */
+    background-color: rgba(0, 0, 0, 0.4);
     border-radius: 12px;
-    width: 100%;
-    max-width: 600px; /* Max width of card */
-    padding: 30px;
-
+    padding: 20px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    max-width: 400px; /* Set the same width as identified persons container */
+    flex: 1;
+  }
+  
+  .auth-content {
     display: flex;
-    flex-direction: column;
-    align-items: center;
+    align-items: flex-start;
     justify-content: center;
-}
-
-
-/* Card Body */
-.auth-card-body {
+    gap: 20px; /* Space between auth card and identified persons */
     width: 100%;
-}
-
-/* Video Container */
-.video-container {
+    max-width: 1200px;
+    margin-top: 20px;
+  }
+  
+  
+  /* Card Body */
+  .auth-card-body {
+    width: 100%;
+  }
+  
+  /* Video Container */
+  .video-container {
     text-align: center;
     margin-bottom: 20px;
-}
-
-/* Video Element Styling */
-.auth-video {
+  }
+  
+  /* Video Element Styling */
+  .auth-video {
     border-radius: 10px;
     border: 2px solid #ddd;
-}
-
-/* Button Styling */
-.auth-buttons {
+    max-width: 100%; /* Ensure video fits */
+    height: auto;
+  }
+  
+  /* Button Styling */
+  .auth-buttons {
     display: flex;
+    flex-wrap: wrap; /* Wrap buttons on smaller screens */
     justify-content: space-between;
     gap: 10px;
     width: 100%;
-}
-
-.auth-btn {
+  }
+  
+  .auth-btn {
     padding: 12px 20px;
     font-size: 1.1rem;
     border-radius: 30px;
     transition: background-color 0.3s ease, transform 0.2s ease;
-    width: 48%;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    flex: 1; /* Buttons take equal space */
     text-align: center;
-}
-
-.auth-btn:hover {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
+  
+  .auth-btn:not(:last-child) {
+    margin-right: 10px; /* Add spacing between buttons */
+  }
+  
+  .auth-btn:hover {
     transform: translateY(-2px); /* Slight hover effect */
-}
-
-.auth-btn:disabled {
+  }
+  
+  .auth-btn:disabled {
     opacity: 0.6;
     cursor: not-allowed;
-}
-
-.auth-btn-success {
+  }
+  
+  .auth-btn-success {
     background-color: #28a745;
     color: #fff;
-}
-
-.auth-btn-danger {
-    background-color: #dc3545;
+  }
+  
+  .auth-btn-warning {
+    background-color: #ffc107;
     color: #fff;
-}
-
-/* Identified Person Name */
-.auth-identified-name {
-    font-size: 1.3rem;
-    font-weight: 600;
-    color: #28a745; /* Change color to green (or use any color you prefer) */
-    margin-top: 20px;
-}
-
-/* Message Styling */
-.auth-message {
-    font-size: 1rem;
-    color: #ffffff;
-    margin-top: 15px;
-}
-
-/* Identified Persons Section */
-.identified-persons {
-    margin-top: 20px;
-    width: 100%;
-}
-
-.identified-persons-heading {
-    font-size: 1.3rem;
-    font-weight: 600;
-    color: #28a745;
-    margin-bottom: 10px;
-}
-
-.identified-persons-list {
-    padding: 0;
-    margin-top: 10px;
-    list-style: none;
-}
-
-.identified-person-item {
-    display: flex;
-    align-items: center;
-    padding: 12px;
-    border-bottom: 1px solid #ddd;
-    background-color: #f9f9f9;
-    border-radius: 10px;
-    margin-bottom: 10px;
-    color: black;
-}
-
-.identified-person-image {
-    width: 45px;
-    height: 45px;
-    margin-right: 10px;
-    border: 3px solid #007bff;
-    border-radius: 50%;
-}
-.auth-btn-info {
+  }
+  
+  .auth-btn-info {
     background-color: #50d1f8; /* Light blue */
-    /* border-color: #46; */
-}  
-.back-button {
+    color: #fff;
+  }
+  
+  /* Back Button */
+  .back-button {
     position: absolute;
     top: 20px;
     left: 20px;
     width: 6rem;
-    background-color: #ff6200; /* Blue background */
+    background-color: #ff6200; /* Orange background */
     color: white; /* White text */
-    border: none; /* Matching border color */
+    border: none;
     border-radius: 30px; /* Rounded corners */
     font-size: 16px;
-    padding: 8px 16px; /* Padding for better spacing */
+    padding: 8px 16px;
     cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.2s ease; /* Smooth transition on hover */
+    transition: background-color 0.3s ease, transform 0.2s ease;
   }
   
   .back-button:hover {
     background-color: #e05a00;
-    transform: translateY(-3px); /* Slight scale effect on hover */
+    transform: translateY(-3px); /* Slight hover effect */
   }
   
   .back-button:focus {
     outline: none; /* Remove default focus outline */
   }
   
+  /* Identified Person Name */
+  .auth-identified-name {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: #28a745; /* Green for success */
+    margin-top: 20px;
+  }
   
-
-/* Responsive Design */
-@media (max-width: 768px) {
+  /* Message Styling */
+  .auth-message {
+    font-size: 1rem;
+    color: #ffffff;
+    margin-top: 15px;
+  }
+  
+  /* Identified Persons Section */
+  /* Identified Persons Section */
+.identified-persons {
+    flex: 1;
+    background-color: rgba(0, 0, 0, 0.4); /* Darker background for contrast */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    padding: 20px;
+    border-radius: 12px;
+    color: black;
+    max-height: 400px; /* Limit height */
+    overflow-y: auto; /* Add scrolling for overflow */
+    max-width: 400px; /* Match the width of the auth card */
+  }
+  
+  
+  .identified-persons-heading {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: #28a745;
+    margin-bottom: 10px;
+  }
+  
+  .identified-persons-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .identified-person-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+    background-color: #f9f9f9;
+    padding: 10px;
+    border-radius: 10px;
+    color: black;
+  }
+  
+  .identified-person-image {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-right: 10px;
+    border: 2px solid #007bff;
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 768px) {
     .auth-heading {
-        font-size: 2rem; /* Slightly smaller heading on mobile */
+      font-size: 1.2rem; /* Smaller heading on mobile */
+      width: 90%; /* Adjust width for smaller screens */
     }
-
+  
     .auth-card {
-        padding: 20px; /* Less padding on small screens */
-        max-width: 100%;
+      padding: 20px; /* Less padding on small screens */
+      max-width: 100%;
     }
-
+  
     .auth-btn {
-        font-size: 1rem; /* Smaller buttons */
-        padding: 10px 15px;
+      font-size: 1rem; /* Smaller buttons */
+      padding: 10px 15px;
+      flex: 1 1 100%; /* Make buttons stack on smaller screens */
+      margin-right: 0; /* Remove side margins for buttons */
     }
-
+  
     .auth-identified-name {
-        font-size: 1.1rem; /* Smaller font size for names */
+      font-size: 1.1rem; /* Smaller font size for names */
     }
-}
+  
+    .back-button {
+      width: auto; /* Allow button to resize */
+      font-size: 14px; /* Slightly smaller text */
+    }
+  
+    .video-container {
+      width: 100%; /* Ensure the video is responsive */
+    }
+  }
+  

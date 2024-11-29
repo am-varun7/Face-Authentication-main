@@ -8,6 +8,10 @@ const IndividualRegCNN = () => {
     const [frameCount, setFrameCount] = useState(0);
     const [status, setStatus] = useState("");
     const [name, setName] = useState("");
+    const [roll_no, setroll_no] = useState("");
+    const [branch, setbranch] = useState("");
+    const [year, setyear] = useState("");
+    const [section, setsection] = useState("");
     const navigate = useNavigate();
 
     // Start the video stream
@@ -105,7 +109,7 @@ const IndividualRegCNN = () => {
             return;
         }
 
-        const requestBody = { name, embeddings };
+        const requestBody = { name,roll_no,branch,year,section, embeddings };
 
         try {
             const response = await fetch("http://localhost:5000/api/face/register-face-cnn", {
@@ -159,6 +163,43 @@ const IndividualRegCNN = () => {
                         onChange={(e) => setName(e.target.value)}
                         disabled={isRegistering}
                         className="register-input mb-3"
+                    />
+                    <input
+                        type="text"
+                        placeholder="Enter Roll_no"
+                        value={roll_no}
+                        onChange={(e) => setroll_no(e.target.value)}
+                        disabled={isRegistering}
+                        className="register-input mb-3"
+                        required
+                    />
+                    <input
+                        type="text"
+                        placeholder="Enter Branch"
+                        value={branch}
+                        onChange={(e) => setbranch(e.target.value)}
+                        disabled={isRegistering}
+                        className="register-input mb-3"
+                        required
+                    />
+                    <input
+                        type="text"
+                        placeholder="Enter year"
+                        value={year}
+                        onChange={(e) => setyear(e.target.value)}
+                        disabled={isRegistering}
+                        className="register-input mb-3"
+                        required
+                    />
+                    
+                    <input
+                        type="text"
+                        placeholder="Enter section"
+                        value={section}
+                        onChange={(e) => setsection(e.target.value)}
+                        disabled={isRegistering}
+                        className="register-input mb-3"
+                        required
                     />
                     <video ref={videoRef} className="register-video" muted />
                     <br />

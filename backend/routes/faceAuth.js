@@ -13,7 +13,11 @@ router.post('/register-face', fetchuser, async (req, res) => {
         console.log(req.body);
         // const { name, embedding } = req.body;
         const name = req.body.name;
-        const embeddings = req.body.embeddings
+        const roll_no=req.body.roll_no;
+        const branch=req.body.branch;
+        const year=req.body.year;
+        const section=req.body.section;
+        const embeddings = req.body.embeddings;
 
         
         if (!name || !embeddings) {
@@ -55,6 +59,10 @@ router.post('/register-face', fetchuser, async (req, res) => {
         const newFace = new FaceEmbedding({
             user: req.user.id, // Link embedding to logged-in user
             name,
+            roll_no,
+            branch,
+            year,
+            section,
             embedding: averagedEmbedding, // Store the averaged embedding
         });
         console.log(averagedEmbedding)
@@ -71,6 +79,10 @@ router.post('/register-face-cnn', fetchuser, async (req, res) => {
         console.log(req.body);
         // const { name, embedding } = req.body;
         const name = req.body.name;
+        const roll_no=req.body.roll_no;
+        const branch=req.body.branch;
+        const year=req.body.year;
+        const section=req.body.section;
         const embeddings = req.body.embeddings
 
         
@@ -113,6 +125,10 @@ router.post('/register-face-cnn', fetchuser, async (req, res) => {
         const newFace = new FaceEmbeddingCNN({
             user: req.user.id, // Link embedding to logged-in user
             name,
+            roll_no,
+            branch,
+            year,
+            section,
             embedding: averagedEmbedding, // Store the averaged embedding
         });
         console.log(averagedEmbedding)
@@ -176,6 +192,10 @@ router.post('/authenticate', fetchuser, async (req, res) => {
             return res.status(200).json({
                 message: "Person identified successfully",
                 name: bestMatch.name,
+                roll_no: bestMatch.roll_no,
+                branch: bestMatch.branch,
+                year: bestMatch.year,
+                section: bestMatch.section,
                 details: bestMatch, // Include any other stored details
             });
         } else {
@@ -236,6 +256,10 @@ router.post('/authenticate-cnn', fetchuser, async (req, res) => {
             return res.status(200).json({
                 message: "Person identified successfully",
                 name: bestMatch.name,
+                roll_no: bestMatch.roll_no,
+                branch: bestMatch.branch,
+                year: bestMatch.year,
+                section: bestMatch.section,
                 details: bestMatch, // Include any other stored details
             });
         } else {

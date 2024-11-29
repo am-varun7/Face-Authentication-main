@@ -89,15 +89,17 @@ const Authentication = () => {
 
       if (backendResponse.ok && result.name) {
         setIdentifiedPerson(result.name);
-        setMessage(`Identified: ${result.name}`);
+        setMessage(
+          `Name: ${result.name}`);
+        
 
         // Add to the identified persons list if not already present
         setPersonsIdentified((prev) => {
           const isPersonExist = prev.some(
-            (person) => person.name === result.name
+            (person) => person.name === result.name && person.roll_no === result.roll_no && person.branch === result.branch && person.year === result.year && person.section === result.section
           );
           if (!isPersonExist) {
-            return [...prev, { name: result.name, image: dataUrl }];
+            return [...prev, { name: result.name, roll_no: result.roll_no,branch:result.branch,year:result.year,section:result.section ,image: dataUrl }];
           }
           return prev;
         });
@@ -167,75 +169,91 @@ const Authentication = () => {
 
   return (
     <div className="auth-container">
-      <button onClick={handleBack} className="back-button">
-        &lt; Back
-      </button>
+  {/* Back Button */}
+  <button onClick={handleBack} className="back-button">
+    &lt; Back
+  </button>
 
-      <h1 className="auth-heading">Face Authentication</h1>
-      <div className="auth-card">
-        <div className="auth-card-body">
-          <div className="video-container">
-            <video
-              ref={videoRef}
-              width="100%"
-              height="auto"
-              autoPlay
-              muted
-              className="auth-video"
-            />
-          </div>
-          <div className="auth-buttons">
+  <h1 className="auth-heading">Face Authentication</h1>
+
+  <div className="auth-content">
+    {/* Authentication Card */}
+    <div className="auth-card">
+      <div className="auth-card-body">
+        <div className="video-container">
+          <video
+            ref={videoRef}
+            width="100%"
+            height="auto"
+            autoPlay
+            muted
+            className="auth-video"
+          />
+        </div>
+
+        <div className="auth-buttons">
+          <button
+            onClick={startAuthentication}
+            disabled={isAuthenticating}
+            className="auth-btn auth-btn-success"
+          >
+            Start Authentication
+          </button>
+          {showRecapture && (
             <button
-              onClick={startAuthentication}
-              disabled={isAuthenticating}
-              className="auth-btn auth-btn-success"
+              onClick={handleRecapture}
+              className="auth-btn auth-btn-warning"
             >
-              Start Authentication
+              Recapture
             </button>
-            {showRecapture && (
-              <button
-                onClick={handleRecapture}
-                className="auth-btn auth-btn-warning"
-              >
-                Recapture
-              </button>
-            )}
-            {showReverify && (
-              <button
-                onClick={handleReverify}
-                className="auth-btn auth-btn-info"
-              >
-                Reverify
-              </button>
-            )}
-          </div>
-          <h3 className="auth-identified-name mt-3">
-            {identifiedPerson ? `Identified: ${identifiedPerson}` : ""}
-          </h3>
-          <p className="auth-message">{message}</p>
-
-          {personsIdentified.length > 0 && (
-            <div className="identified-persons">
-              <h3 className="identified-persons-heading mt-4">
-                Persons Identified
-              </h3>
-              <ul className="identified-persons-list">
-                {personsIdentified.map((person, index) => (
-                  <li key={index} className="identified-person-item">
-                    <img
-                      src={person.image}
-                      alt={person.name}
-                      className="identified-person-image"
-                    />
-                    {person.name}
-                  </li>
-                ))}
-              </ul>
-            </div>
+          )}
+          {showReverify && (
+            <button
+              onClick={handleReverify}
+              className="auth-btn auth-btn-info"
+            >
+              Reverify
+            </button>
           )}
         </div>
+
+        <h3 className="auth-identified-name mt-3">
+          {identifiedPerson ? `Identified: ${identifiedPerson}` : ""}
+        </h3>
+
+        <p className="auth-message">{message}</p>
       </div>
     </div>
+
+    {/* Identified Persons Section */}
+    {personsIdentified.length > 0 && (
+      <div className="identified-persons">
+        <h3 className="identified-persons-heading mt-4">Persons Identified</h3>
+        <ul className="identified-persons-list">
+          {personsIdentified.map((person, index) => (
+            <li key={index} className="identified-person-item">
+              <div className="person-card">
+                <img
+                  src={person.image}
+                  alt={person.name}
+                  className="identified-person-image"
+                />
+                <div className="person-details">
+                  <p><strong>Name:</strong> {person.name}</p>
+                  <p><strong>Roll No:</strong> {person.roll_no}</p>
+                  <p><strong>Branch:</strong> {person.branch}</p>
+                  <p><strong>Year:</strong> {person.year}</p>
+                  <p><strong>Section:</strong> {person.section}</p>
+                </div>
+              </div>
+            </li>
+          ))}
+        </ul>
+      </div>
+    )}
+  </div>
+</div>
+
   );
 };
 
