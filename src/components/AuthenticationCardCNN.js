@@ -66,6 +66,7 @@ const AuthenticationCardCNN = () => {
 
             if (!data.faceDetected) {
                 setMessage("No face detected, please adjust your position.");
+                setShowReverify(true);
                 return;
             }
 
@@ -100,6 +101,7 @@ const AuthenticationCardCNN = () => {
                 setMessage("Face detected but not recognized.");
                 setShowRecapture(true);
                 stopVideo();
+                setCapturing(false);
             }
         } catch (error) {
             console.error("Error during authentication:", error);

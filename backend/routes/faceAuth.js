@@ -4,6 +4,7 @@ const axios = require('axios');
 const FaceEmbedding = require('../models/FaceSchema');
 const FaceEmbeddingCNN = require('../models/FaceSchemaCNN');
 const fetchuser = require('../middleware/fetchuser');
+const AuthenticationLog =require('../models/AuthLog');
 
 // Register Face - Calls Python service to generate embedding, then saves it in MongoDB
 
@@ -187,7 +188,7 @@ router.post('/authenticate', fetchuser, async (req, res) => {
         
 
         // Step 3: Decide match threshold (adjust this based on testing)
-        const threshold = 0.6; // Set an appropriate threshold based on your model's performance
+        const threshold = 0.75; // Set an appropriate threshold based on your model's performance
         if (minDistance <= threshold && bestMatch) {
             return res.status(200).json({
                 message: "Person identified successfully",
@@ -251,7 +252,7 @@ router.post('/authenticate-cnn', fetchuser, async (req, res) => {
         
 
         // Step 3: Decide match threshold (adjust this based on testing)
-        const threshold = 0.6; // Set an appropriate threshold based on your model's performance
+        const threshold = 0.75; // Set an appropriate threshold based on your model's performance
         if (minDistance <= threshold && bestMatch) {
             return res.status(200).json({
                 message: "Person identified successfully",
@@ -270,7 +271,107 @@ router.post('/authenticate-cnn', fetchuser, async (req, res) => {
         res.status(500).send("Internal Server Error");
     }
 });
+
+router.delete('/delete-labels/:label', fetchuser, async (req, res) => {
+    try {
+        const name = req.params.label;
+        const modelType = req.query['model-type'];
+        console.log('DELETE request received for label:', name, 'ModelType: ', modelType);
+
+        if (!name || !modelType) {
+            return res.status(400).json({ error: 'Label & ModelType parameters are required' });
+        }
+
+        if(modelType==='CNN') {
+            result = await FaceEmbedding.deleteOne({ user: req.user.id, name });
+        } else if (modelType==='PTM') {
+            result = await FaceEmbeddingCNN.deleteOne({ user: req.user.id, name });
+        } else {
+            return res.status(400).json({ error: 'Invalid Model Type'});
+        }
+        
+        console.log('Delete operation result:', result);
+
+        if (result.deletedCount === 0) {
+            return res.status(404).json({ error: 'Label not found or already deleted' });
+        }
+
+        res.json({ message: 'Label removed successfully' });
+    } catch (error) {
+        console.error('Error deleting label:', error.message);
+        res.status(500).json({ error: 'An internal server error occurred while deleting the label' });
+    }
+});
+
+
+
+router.post("/log", fetchuser, async (req, res) => {
+  const userId = req.user.id; // The userId is attached from the JWT token
+  const { name, rollNo, dateTime } = req.body;
+
+  if (!userId || !name || !rollNo || !dateTime) {
+    return res.status(400).json({ success: false, error: "Missing required fields" });
+  }
+
+  // Extract the date part of the dateTime (i.e., remove the time)
+  const currentDate = new Date(dateTime).toISOString().split('T')[0]; // "YYYY-MM-DD"
+
+  try {
+    // Check if a log for this user, rollNo, and current date already exists
+    const existingLog = await AuthenticationLog.findOne({
+      userId,
+      rollNo,
+      dateTime: { $gte: new Date(currentDate), $lt: new Date(new Date(currentDate).setDate(new Date(currentDate).getDate() + 1)) }
+    });
+
+    if (existingLog) {
+      return res.status(400).json({ success: false, error: "Log for this user already exists for today" });
+    }
+
+    // Save the new log if no log exists for today
+    const newLog = new AuthenticationLog({ userId, name, rollNo, dateTime });
+    await newLog.save();
+
+    res.status(201).json({ success: true, message: "Log saved successfully" });
+  } catch (error) {
+    console.error("Error saving log:", error);
+    res.status(500).json({ success: false, error: "Internal server error" });
+  }
+});
+
+
+
+
+router.get('/getlogs', fetchuser, async (req, res) => {
+    try {
+        const userId = req.user.id; // Extract userId from auth middleware
+        const today = new Date();
+        today.setHours(23, 59, 59, 999); // End of today
+        const yesterday = new Date();
+        yesterday.setDate(yesterday.getDate() - 1);
+        yesterday.setHours(0, 0, 0, 0); // Start of yesterday
+
+        // Fetch records with matching userId and date in range
+        const logs = await AuthenticationLog.find({
+            userId, // Filter by userId
+            dateTime: {
+                $gte: yesterday, // From yesterday 00:00:00
+                $lte: today,     // Up to today 23:59:59
+            },
+        });
+
+        res.json({ logs });
+    } catch (error) {
+        console.error('Error fetching logs:', error);
+        res.status(500).send('Server Error');
+    }
+});
+
+
 module.exports = router;
+
+
+
 
 
 

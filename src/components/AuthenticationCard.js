@@ -91,7 +91,20 @@ const Authentication = () => {
         setIdentifiedPerson(result.name);
         setMessage(
           `Name: ${result.name}`);
-        
+
+          await fetch("http://localhost:5000/api/face/log", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "auth-token": localStorage.getItem("token"),  // Make sure the token is valid
+            },
+            body: JSON.stringify({
+              name: result.name,
+              rollNo: result.roll_no,
+              dateTime: new Date().toISOString(),
+            }),
+          });
+
 
         // Add to the identified persons list if not already present
         setPersonsIdentified((prev) => {
@@ -113,13 +126,17 @@ const Authentication = () => {
         setMessage("Authentication failed: Unknown user detected");
         setShowRecapture(true); // Show recapture button if face is detected but not recognized
         stopVideo(); // Stop the video if the face is not recognized
+        setCapturing(false);
       }
     } catch (error) {
       console.error("Error during authentication:", error);
       setMessage("Error occurred during authentication.");
+      setShowRecapture(false);
       stopVideo(); // Stop the video on any error
     }
   }, []); // Empty array means this function won't change unless dependencies change
+
+  
 
   // Continuously capture frames while "capturing" is true
   useEffect(() => {

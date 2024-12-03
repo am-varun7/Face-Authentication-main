@@ -1,5 +1,5 @@
 /* Style for the video background */
-.video-background video {
+.signup-video-background video {
   position: fixed;
   top: 0;
   left: 0;
@@ -10,7 +10,7 @@
 }
 
 /* Login/signup box container */
-.container {
+.signup-container {
   background: rgba(255, 255, 255, 0.9);
   max-width: 400px;
   position: absolute;
@@ -19,11 +19,11 @@
   padding: 30px 40px;
   border-radius: 15px;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
-  animation: fadeInRight 0.8s ease-out;
+  animation: signup-fadeInRight 0.8s ease-out;
 }
 
 /* Fade-in animation */
-@keyframes fadeInRight {
+@keyframes signup-fadeInRight {
   0% {
     opacity: 0;
     transform: translateX(50px);
@@ -35,7 +35,7 @@
 }
 
 /* Header styling */
-.container h1 {
+.signup-container h1 {
   text-align: center;
   font-family: 'Poppins', sans-serif;
   font-size: 28px;
@@ -45,7 +45,7 @@
 }
 
 /* Form labels */
-.form-label {
+.signup-form-label {
   font-size: 14px;
   color: #555;
   margin-bottom: 5px;
@@ -54,7 +54,7 @@
 }
 
 /* Form inputs */
-.form-control {
+.signup-form-control {
   width: 100%;
   padding: 12px;
   margin-bottom: 15px;
@@ -64,14 +64,14 @@
   transition: box-shadow 0.3s ease, border-color 0.3s ease;
 }
 
-.form-control:focus {
+.signup-form-control:focus {
   border-color: #007bff;
   outline: none;
   box-shadow: 0 0 8px rgba(0, 123, 255, 0.5);
 }
 
 /* Button */
-button {
+.signup-button {
   background-color: #007bff;
   color: white;
   padding: 12px 20px;
@@ -84,26 +84,26 @@ button {
   transition: transform 0.3s ease, background-color 0.3s ease;
 }
 
-button:hover {
+.signup-button:hover {
   background-color: #0056b3;
   transform: scale(1.05);
 }
 
 /* Link for switching to login */
-.container a {
+.signup-container a.signup-link {
   color: #007bff;
   text-decoration: none;
   font-size: 14px;
   transition: color 0.3s ease;
 }
 
-.container a:hover {
+.signup-container a.signup-link:hover {
   color: #0056b3;
   text-decoration: underline;
 }
 
 /* Help text */
-.form-text {
+.signup-form-text {
   font-size: 12px;
   color: #777;
   margin-top: -10px;
@@ -111,7 +111,7 @@ button:hover {
 }
 
 /* Subtle hover effect for the box */
-.container:hover {
+.signup-container:hover {
   box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
   transition: all 0.3s ease;
 }

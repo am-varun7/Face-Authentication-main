@@ -51,70 +51,71 @@ const Signup = (props) => {
   };
 
   return (<>
-    <div className="video-background">
-      <video autoPlay muted loop id="background-video">
-        <source src={Backgroundvideo} type="video/mp4" />
-        Your browser does not support the video tag.
-      </video>
+    <div className="signup-video-background">
+  <video autoPlay muted loop id="signup-background-video">
+    <source src={Backgroundvideo} type="video/mp4" />
+    Your browser does not support the video tag.
+  </video>
+</div>
+<div className="signup-container">
+  <h1 style={{ fontFamily: 'Orbitron' }}>FaceRecs</h1>
+  <form onSubmit={handleSubmit}>
+    <div>
+      <label htmlFor="name" className="signup-form-label">Name</label>
+      <input
+        type="text"
+        className="signup-form-control"
+        id="name"
+        name="name"
+        onChange={onChange}
+        value={credentials.name}
+      />
     </div>
-    <div className="container">
-      <h1 style={{fontFamily: 'Orbitron'}}>FaceRecs</h1>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label htmlFor="name" className="form-label">Name</label>
-          <input
-            type="text"
-            className="form-control"
-            id="name"
-            name="name"
-            onChange={onChange}
-            value={credentials.name}
-          />
-        </div>
-        <div>
-          <label htmlFor="email" className="form-label">Email address</label>
-          <input
-            type="email"
-            className="form-control"
-            id="email"
-            name="email"
-            onChange={onChange}
-            value={credentials.email}
-          />
-          <div className="form-text">We'll never share your email with anyone else.</div>
-        </div>
-        <div>
-          <label htmlFor="password" className="form-label">Password</label>
-          <input
-            type="password"
-            className="form-control"
-            name="password"
-            onChange={onChange}
-            value={credentials.password}
-            id="password"
-            required
-            minLength={5}
-          />
-        </div>
-        <div>
-          <label htmlFor="cpassword" className="form-label">Confirm Password</label>
-          <input
-            type="password"
-            className="form-control"
-            name="cpassword"
-            onChange={onChange}
-            value={credentials.cpassword}
-            id="cpassword"
-            required
-            minLength={5}
-          />
-        </div>
-        <button type="submit">Signup</button>
-      </form>
-      <div>
-        Already have an account? <Link to="/login">Login</Link>
-      </div>
+    <div>
+      <label htmlFor="email" className="signup-form-label">Email address</label>
+      <input
+        type="email"
+        className="signup-form-control"
+        id="email"
+        name="email"
+        onChange={onChange}
+        value={credentials.email}
+      />
+      <div className="signup-form-text">We'll never share your email with anyone else.</div>
     </div>
+    <div>
+      <label htmlFor="password" className="signup-form-label">Password</label>
+      <input
+        type="password"
+        className="signup-form-control"
+        name="password"
+        onChange={onChange}
+        value={credentials.password}
+        id="password"
+        required
+        minLength={5}
+      />
+    </div>
+    <div>
+      <label htmlFor="cpassword" className="signup-form-label">Confirm Password</label>
+      <input
+        type="password"
+        className="signup-form-control"
+        name="cpassword"
+        onChange={onChange}
+        value={credentials.cpassword}
+        id="cpassword"
+        required
+        minLength={5}
+      />
+    </div>
+    <button type="submit" className="signup-button">Signup</button>
+  </form>
+  <div>
+    Already have an account? <Link to="/login" className="signup-link">Login</Link>
+  </div>
+</div>
+
   </>
     
   );

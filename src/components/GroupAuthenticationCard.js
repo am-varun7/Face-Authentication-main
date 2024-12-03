@@ -1,9 +1,8 @@
-
 import React, { useRef, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 // import './Authentication.css'; // Import your CSS file
 
-const GroupAuthentication = () => {
+const GroupAuthenticationcard = () => {
     const [isAuthenticating, setIsAuthenticating] = useState(false);
     const [identifiedPerson, setIdentifiedPerson] = useState(null);
     const [message, setMessage] = useState("");
@@ -60,7 +59,7 @@ const GroupAuthentication = () => {
 
         try {
             // Send the frame to Flask for face detection and embedding generation
-            const response = await fetch("http://localhost:5001/generate-embedding-group", {
+            const response = await fetch("http://localhost:5001/generate-embedding", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ frame: dataUrl }),
@@ -129,7 +128,7 @@ const GroupAuthentication = () => {
             <button onClick={handleBack} className="back-button">
                 &lt; Back
             </button>
-    <h1 className="auth-heading">Group Authentication Mtcnn</h1>
+    <h1 className="auth-heading">Group Authentication</h1>
     <div className="auth-content">
         <div className="auth-card">
             <div className="auth-card-body">
@@ -183,4 +182,4 @@ const GroupAuthentication = () => {
     );
 };
 
-export default GroupAuthentication;
+export default GroupAuthenticationcard;

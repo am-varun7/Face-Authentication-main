@@ -2,8 +2,9 @@ import React, { useState } from 'react';
 import individualImage from '../images/single.png';
 import GroupImage from '../images/group.png';
 import CrowdImage from '../images/crowd.png';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from "react-router-dom";
 import './Dashboard.css';
+import { FaUserCircle } from "react-icons/fa";
 
 const Dashboard = () => {
     const navigate = useNavigate();
@@ -36,6 +37,21 @@ const Dashboard = () => {
     const handleIndiAuth = () => {
         navigate('/individualauthentication');
     };
+    const handlegroupAuth = () => {
+        navigate('/groupauthentication');
+    };
+    const handlegroupAuthcard = () => {
+        navigate('/groupauthenticationcard');
+    };
+    const [selectedModel, setSelectedModel] = useState(""); // To track the selected model
+
+  const handleModelSelection = (model) => {
+    setSelectedModel(model);
+  };
+
+  const handleBack = () => {
+    setSelectedModel(""); // Reset to show the model selection options
+  };
 
     return (
         <>
@@ -52,8 +68,13 @@ const Dashboard = () => {
                                 <li><a href="#about">About</a></li>
                             </ul>
                         </div>
-                        <div className="navbar-right logout-desktop">
+                        <div className='profile_logout'>
+                        <Link to="/userprofile" style={{ textDecoration: "none", marginRight: "10px" }}>
+                                    <FaUserCircle size={50} color="teal"  />
+                            </Link>
+                            <div className="navbar-right logout-desktop">
                             <button className="logout-button" onClick={handleLogout}>Log out</button>
+                            </div>
                         </div>
                         <div className="hamburger" onClick={toggleMenu}>
                             <div className="bar"></div>
@@ -88,11 +109,65 @@ const Dashboard = () => {
                         <img src={individualImage} alt="Individual Face" />
                         <h5>Individual Face Authentication</h5>
                         <p>Securely authenticate individual users with advanced facial recognition technology.</p>
+                        
                         <div className="button-group">
-                        <button className="btn btn-primary m-2" onClick={handleIndiRegister}>Register</button>
-                        <button className="btn btn-dark m-2" onClick={handleIndiRegisterCNN}>Register using our custom model</button>
-                        <button className="btn btn-secondary m-2" onClick={handleIndiAuth}>Verify</button>
-                        <button className="btn btn-dark m-2" onClick={handleIndiAuthCNN}>Verify using our custom model</button>
+                            {/* Render model selection buttons if no model is selected */}
+                            {selectedModel === "" && (
+                            <>
+                                <button
+                                className="btn btn-primary m-2"
+                                onClick={() => handleModelSelection("pretrained")}
+                                >
+                                Use Pretrained Model
+                                </button>
+                                <button
+                                className="btn btn-primary m-2"
+                                onClick={() => {
+                                    alert("Warning!\nThe accuracy of this model is 75% ,for better accuracy use pre-trained model .");
+                                    handleModelSelection("cnn");
+                                    }
+                                }
+                                >
+                                Use Custom CNN Model
+                                </button>
+                            </>
+                            )}
+
+                            {/* Render Pretrained Model options */}
+                            {selectedModel === "pretrained" && (
+                            <>
+                                <button className="btn btn-primary m-2" onClick={handleIndiRegister}>
+                                Register
+                                </button>
+                                <button className="btn btn-secondary m-2" onClick={handleIndiAuth}>
+                                Verify
+                                </button>
+                                <button className="btn btn-danger m-2" onClick={handleBack}>
+                                Back
+                                </button>
+                            </>
+                            )}
+
+                            {/* Render Custom CNN Model options */}
+                            {selectedModel === "cnn" && (
+                            <>
+                                <button
+                                className="btn btn-primary m-2"
+                                onClick={handleIndiRegisterCNN}
+                                >
+                                Register using custom model
+                                </button>
+                                <button
+                                className="btn btn-secondary m-2"
+                                onClick={handleIndiAuthCNN}
+                                >
+                                Verify using custom model
+                                </button>
+                                <button className="btn btn-danger m-2" onClick={handleBack}>
+                                Back
+                                </button>
+                            </>
+                            )}
                         </div>
                     </div>
 
@@ -101,8 +176,8 @@ const Dashboard = () => {
                         <h5>Group Authentication</h5>
                         <p>Authenticate multiple users simultaneously in a single image with precision.</p>
                         <div className="button-group">
-                            <button className="btn btn-primary">Register</button>
-                            <button className="btn btn-secondary">Verify</button>
+                            <button className="btn btn-secondary" onClick={handlegroupAuth}>Verify mtcnn</button>
+                            <button className="btn btn-secondary" onClick={handlegroupAuthcard}>Verify</button>
                         </div>
                     </div>
 

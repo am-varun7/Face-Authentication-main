@@ -9,7 +9,9 @@ import IndividualReg from './components/IndividualReg';
 import AuthenticationCard from './components/AuthenticationCard';
 import AuthenticationCardCNN from './components/AuthenticationCardCNN';
 import IndividualRegCNN from './components/IndividualRegCNN';
-import Groupauthenticate from './components/Groupauthentication';
+import UserProfile from './components/UserProfile';
+import GroupAuthentication from './components/GroupAuthentication';
+import GroupAuthenticationcard from './components/GroupAuthenticationCard';
 
 function App() {
   const [alert, setAlert] = useState(null);
@@ -41,7 +43,9 @@ function App() {
           <Route path="/individualregistrationcnn" element={<IndividualRegCNN />} />
           <Route path="/individualauthentication" element={<AuthenticationCard />} />
           <Route path="/individualauthenticationcnn" element={<AuthenticationCardCNN />} />
-          <Route path="/groupauthentication" element={<Groupauthenticate />} />
+          <Route path="/groupauthentication" element={<GroupAuthentication />} />
+          <Route path="/groupauthenticationcard" element={<GroupAuthenticationcard />} />
+          <Route path="/userprofile" element={<UserProfile />} />
         </Routes>
       </BrowserRouter>
     </>
