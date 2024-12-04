@@ -57,7 +57,7 @@ const GroupAuthentication = () => {
         const context = canvas.getContext("2d");
         context.drawImage(videoRef.current, 0, 0, canvas.width, canvas.height);
         const dataUrl = canvas.toDataURL("image/jpeg");
-
+    
         try {
             // Send the frame to Flask for face detection and embedding generation
             const response = await fetch("http://localhost:5001/generate-embedding-group", {
@@ -65,49 +65,57 @@ const GroupAuthentication = () => {
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ frame: dataUrl }),
             });
-
+    
             const data = await response.json();
-
-            if (!data.faceDetected) {
+    
+            if (!data.faceDetected || data.faces.length === 0) {
                 setMessage("No face detected, please adjust your position.");
                 return;
             }
-
-            // If a face is detected, send the embedding to the backend for authentication
-            const backendResponse = await fetch("http://localhost:5000/api/face/authenticate", {
+    
+            // Extract embeddings from Flask response
+            const embeddings = data.faces.map((face) => face.embedding);
+    
+            // Send all embeddings to the backend for authentication
+            const backendResponse = await fetch("http://localhost:5000/api/face/groupauthenticate", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                     "auth-token": localStorage.getItem("token"),
                 },
-                body: JSON.stringify({ embedding: data.embedding }),
+                body: JSON.stringify({ embeddings }),
             });
-
+    
             const result = await backendResponse.json();
-
-            if (backendResponse.ok && result.name) {
-                setIdentifiedPerson(result.name);
-                setMessage(`Identified: ${result.name}`);
-
-                // Add to the identified persons list if not already present
-                setPersonsIdentified((prev) => {
-                    const isPersonExist = prev.some((person) => person.name === result.name);
-                    if (!isPersonExist) {
-                        return [
-                            ...prev,
-                            { name: result.name, image: dataUrl },
-                        ];
-                    }
-                    return prev;
-                });
+    
+            if (backendResponse.ok) {
+                const identifiedPersons = result.results.filter((r) => r.match);
+                if (identifiedPersons.length > 0) {
+                    identifiedPersons.forEach((person) => {
+                        setPersonsIdentified((prev) => {
+                            const isPersonExist = prev.some((p) => p.name === person.name);
+                            if (!isPersonExist) {
+                                return [
+                                    ...prev,
+                                    { name: person.name, image: dataUrl },
+                                ];
+                            }
+                            return prev;
+                        });
+                    });
+                    setMessage(`Identified: ${identifiedPersons.map((p) => p.name).join(", ")}`);
+                } else {
+                    setMessage("Faces detected but not recognized.");
+                }
             } else {
-                setMessage("Face detected but not recognized.");
+                setMessage("Error in authentication.");
             }
         } catch (error) {
             console.error("Error during authentication:", error);
             setMessage("Error occurred during authentication.");
         }
     };
+    
 
     // Continuously capture frames while "capturing" is true
     useEffect(() => {

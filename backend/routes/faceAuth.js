@@ -4,7 +4,7 @@ const axios = require('axios');
 const FaceEmbedding = require('../models/FaceSchema');
 const FaceEmbeddingCNN = require('../models/FaceSchemaCNN');
 const fetchuser = require('../middleware/fetchuser');
-const AuthenticationLog =require('../models/AuthLog');
+
 
 // Register Face - Calls Python service to generate embedding, then saves it in MongoDB
 
@@ -207,6 +207,69 @@ router.post('/authenticate', fetchuser, async (req, res) => {
         res.status(500).send("Internal Server Error");
     }
 });
+router.post('/groupauthenticate', fetchuser, async (req, res) => {
+    try {
+        const { embeddings } = req.body; // Accept multiple embeddings
+        console.log("Received embeddings from Frontend");
+        console.log("Number of embeddings received:", embeddings.length);
+
+        if (!embeddings || embeddings.length === 0) {
+            return res.status(400).json({ error: "Embeddings are required for authentication" });
+        }
+
+        // Fetch all stored embeddings for the logged-in user
+        const storedFaces = await FaceEmbedding.find({ user: req.user.id });
+
+        if (storedFaces.length === 0) {
+            return res.status(404).json({ message: "No registered faces found for authentication" });
+        }
+
+        const threshold = 0.75; // Match threshold
+        const results = []; // To store results for all embeddings
+
+        embeddings.forEach((embedding) => {
+            let bestMatch = null;
+            let minDistance = Infinity;
+
+            storedFaces.forEach((face) => {
+                const storedEmbedding = face.embedding;
+
+                if (embedding.length !== storedEmbedding.length) {
+                    console.error(`Mismatched lengths: received=${embedding.length}, stored=${storedEmbedding.length}`);
+                    return; // Skip this face
+                }
+
+                const distance = Math.sqrt(
+                    embedding.reduce((sum, value, idx) => sum + Math.pow(value - storedEmbedding[idx], 2), 0)
+                );
+
+                if (distance < minDistance) {
+                    minDistance = distance;
+                    bestMatch = face;
+                }
+            });
+
+            if (minDistance <= threshold && bestMatch) {
+                results.push({
+                    match: true,
+                    name: bestMatch.name,
+                    roll_no: bestMatch.roll_no,
+                    branch: bestMatch.branch,
+                    year: bestMatch.year,
+                    section: bestMatch.section,
+                });
+            } else {
+                results.push({ match: false, message: "No match found" });
+            }
+        });
+
+        return res.status(200).json({ results });
+    } catch (error) {
+        console.error("Error during authentication:", error.message);
+        res.status(500).send("Internal Server Error");
+    }
+});
+
 router.post('/authenticate-cnn', fetchuser, async (req, res) => {
     try {
         const { embedding } = req.body; // Receiving embedding from frontend
@@ -304,68 +367,6 @@ router.delete('/delete-labels/:label', fetchuser, async (req, res) => {
 });
 
 
-
-router.post("/log", fetchuser, async (req, res) => {
-  const userId = req.user.id; // The userId is attached from the JWT token
-  const { name, rollNo, dateTime } = req.body;
-
-  if (!userId || !name || !rollNo || !dateTime) {
-    return res.status(400).json({ success: false, error: "Missing required fields" });
-  }
-
-  // Extract the date part of the dateTime (i.e., remove the time)
-  const currentDate = new Date(dateTime).toISOString().split('T')[0]; // "YYYY-MM-DD"
-
-  try {
-    // Check if a log for this user, rollNo, and current date already exists
-    const existingLog = await AuthenticationLog.findOne({
-      userId,
-      rollNo,
-      dateTime: { $gte: new Date(currentDate), $lt: new Date(new Date(currentDate).setDate(new Date(currentDate).getDate() + 1)) }
-    });
-
-    if (existingLog) {
-      return res.status(400).json({ success: false, error: "Log for this user already exists for today" });
-    }
-
-    // Save the new log if no log exists for today
-    const newLog = new AuthenticationLog({ userId, name, rollNo, dateTime });
-    await newLog.save();
-
-    res.status(201).json({ success: true, message: "Log saved successfully" });
-  } catch (error) {
-    console.error("Error saving log:", error);
-    res.status(500).json({ success: false, error: "Internal server error" });
-  }
-});
-
-
-
-
-router.get('/getlogs', fetchuser, async (req, res) => {
-    try {
-        const userId = req.user.id; // Extract userId from auth middleware
-        const today = new Date();
-        today.setHours(23, 59, 59, 999); // End of today
-        const yesterday = new Date();
-        yesterday.setDate(yesterday.getDate() - 1);
-        yesterday.setHours(0, 0, 0, 0); // Start of yesterday
-
-        // Fetch records with matching userId and date in range
-        const logs = await AuthenticationLog.find({
-            userId, // Filter by userId
-            dateTime: {
-                $gte: yesterday, // From yesterday 00:00:00
-                $lte: today,     // Up to today 23:59:59
-            },
-        });
-
-        res.json({ logs });
-    } catch (error) {
-        console.error('Error fetching logs:', error);
-        res.status(500).send('Server Error');
-    }
-});
 
 
 module.exports = router;

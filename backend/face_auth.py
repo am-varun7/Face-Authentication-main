@@ -106,21 +106,37 @@ def generate_embedding_group():
         if boxes is None or len(boxes) == 0:
             return jsonify({"faceDetected": False, "message": "No faces detected"}), 200
 
-        # Loop through each detected face
+        face_results = []  # To store details of all detected faces
+
         for box in boxes:
             x1, y1, x2, y2 = map(int, box)
+
+            # Ensure the face box is within image boundaries
+            x1, y1 = max(0, x1), max(0, y1)
+            x2, y2 = min(frame.shape[1], x2), min(frame.shape[0], y2)
+
             face = frame[y1:y2, x1:x2]
 
             # Preprocess face for FaceNet
-            face = cv2.resize(face, (160, 160))  # Resize to FaceNet input size
-            face = cv2.cvtColor(face, cv2.COLOR_BGR2RGB)  # Convert to RGB
-            embedding = embedder.embeddings([face])[0]  # Generate embedding
+            try:
+                face = cv2.resize(face, (160, 160))  # Resize to FaceNet input size
+                face = cv2.cvtColor(face, cv2.COLOR_BGR2RGB)  # Convert to RGB
+                embedding = embedder.embeddings([face])[0]  # Generate embedding
 
-            # Return embedding for this face
-            return jsonify({"faceDetected": True, "embedding": embedding.tolist()}), 200
+                # Add face embedding and coordinates to results
+                face_results.append({
+                    "box": [x1, y1, x2, y2],
+                    "embedding": embedding.tolist()
+                })
+            except Exception as face_error:
+                # Handle issues with individual faces (e.g., resizing errors)
+                face_results.append({
+                    "box": [x1, y1, x2, y2],
+                    "error": f"Error processing face: {str(face_error)}"
+                })
 
-        # If no embeddings processed (unlikely), send an error
-        return jsonify({"error": "No embeddings processed"}), 500
+        return jsonify({"faceDetected": True, "faces": face_results}), 200
+
     except Exception as e:
         return jsonify({"error": "An error occurred while processing the frame", "details": str(e)}), 500
 

@@ -14,7 +14,6 @@ const UserProfile = () => {
     const [showEditIcon, setShowEditIcon] = useState(false);
     const [showLabels, setShowLabels] = useState(false); // State to toggle labels visibility
     const [showPLabels, setShowPLabels] = useState(false);
-    const [authLogs, setAuthLogs] = useState([]);
 
 
     const navigate = useNavigate();
@@ -33,16 +32,7 @@ const UserProfile = () => {
                         'auth-token': token,
                     },
                 });
-                try{
-                    const response1 = await axios.get('http://localhost:5000/api/face/getlogs', {
-                        headers: {
-                            'auth-token': token,
-                        },
-                    });
-                    setAuthLogs(response1.data.logs);
-                }catch (error) {
-                    console.error('Error fetching authentication logs:', error);
-                }
+                
                 
                 setUserData(response.data.user);
                 setUpdatedName(response.data.user.name);
@@ -268,28 +258,7 @@ const UserProfile = () => {
                     <p style={styles.noData}>No user data available.</p>
                 )}
 
-                <div style={styles.authLogsContainer}>
-                    <h4 style={styles.logsHeader}>Recent Authentications</h4>
-                    {authLogs.length > 0 ? (
-                        <ul style={styles.logsList}>
-                            {authLogs.map((log, index) => (
-                                <li key={index} style={styles.logItem}>
-                                    <span style={styles.logText}>
-                                        <strong>Name:</strong> {log.name}
-                                    </span>
-                                    <span style={styles.logText}>
-                                        <strong>Roll No:</strong> {log.rollNo}
-                                    </span>
-                                    <span style={styles.logDate}>
-                                        <strong>Date:</strong> {new Date(log.dateTime).toLocaleString()}
-                                    </span>
-                                </li>
-                            ))}
-                        </ul>
-                    ) : (
-                        <p style={styles.noLogs}>No recent authentications.</p>
-                    )}
-                </div>
+                
 
 
             </div>

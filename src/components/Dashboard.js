@@ -40,9 +40,6 @@ const Dashboard = () => {
     const handlegroupAuth = () => {
         navigate('/groupauthentication');
     };
-    const handlegroupAuthcard = () => {
-        navigate('/groupauthenticationcard');
-    };
     const [selectedModel, setSelectedModel] = useState(""); // To track the selected model
 
   const handleModelSelection = (model) => {
@@ -177,7 +174,6 @@ const Dashboard = () => {
                         <p>Authenticate multiple users simultaneously in a single image with precision.</p>
                         <div className="button-group">
                             <button className="btn btn-secondary" onClick={handlegroupAuth}>Verify mtcnn</button>
-                            <button className="btn btn-secondary" onClick={handlegroupAuthcard}>Verify</button>
                         </div>
                     </div>
 
