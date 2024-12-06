@@ -3,6 +3,7 @@ import axios from 'axios';
 import styles from './CSS_History'; // Import styles from styles.js
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
+import { useNavigate } from 'react-router-dom';
 
 const History = () => {
     const [verificationData, setVerificationData] = useState([]);
@@ -10,7 +11,7 @@ const History = () => {
     const [selectedDate, setSelectedDate] = useState(new Date());
     const [showCalendar, setShowCalendar] = useState(false);
     const [dateToggle, setDateToggle] = useState('today');
-
+    const navigate = useNavigate();
     useEffect(() => {
         const fetchVerificationData = async () => {
             try {
@@ -45,27 +46,39 @@ const History = () => {
             yesterday: [],
             selectedDate: [],
         };
-
+    
         const today = new Date();
         const yesterday = new Date(today);
         yesterday.setDate(today.getDate() - 1);
-
+    
+        // Function to normalize the date (remove time part for comparison)
+        const normalizeDate = (date) => {
+            const normalizedDate = new Date(date);
+            normalizedDate.setHours(0, 0, 0, 0); // Set time to 00:00:00 to ignore the time part
+            return normalizedDate;
+        };
+    
+        // Normalize selectedDate to ignore time part
+        const normalizedSelectedDate = normalizeDate(selectedDate);
+        const normalizedToday = normalizeDate(today);
+        const normalizedYesterday = normalizeDate(yesterday);
+    
         data.forEach((entry) => {
-            const entryDate = new Date(entry.timestamp);
-            const formattedEntryDate = formatDate(entryDate);
-            const selectedFormattedDate = formatDate(selectedDate);
-
-            if (formattedEntryDate === formatDate(today)) {
+            const entryDate = new Date(entry.createdAt);
+            const normalizedEntryDate = normalizeDate(entryDate); // Normalize the entry's date
+    
+            if (normalizedEntryDate.getTime() === normalizedToday.getTime()) {
                 groupedData.today.push(entry);
-            } else if (formattedEntryDate === formatDate(yesterday)) {
+            } else if (normalizedEntryDate.getTime() === normalizedYesterday.getTime()) {
                 groupedData.yesterday.push(entry);
-            } else if (formattedEntryDate === selectedFormattedDate) {
+            } else if (normalizedEntryDate.getTime() === normalizedSelectedDate.getTime()) {
                 groupedData.selectedDate.push(entry);
             }
         });
-
+    
         return groupedData;
     };
+    
 
     // Function to format the date to dd-mm-yyyy
     const formatDate = (date) => {
@@ -96,9 +109,20 @@ const History = () => {
         setDateToggle('selectedDate');
         setShowCalendar(false);
     };
+    const handleBack = () => {
+        navigate("/userprofile"); // Navigate back to the dashboard
+    };
 
     return (
         <div style={styles.container}>
+            <button
+                onClick={handleBack}
+                style={styles.backButton}
+                onMouseEnter={(e) => Object.assign(e.target.style, styles.backButtonHover)}
+                onMouseLeave={(e) => Object.assign(e.target.style, styles.backButton)}
+            >
+                &lt; Back
+            </button>
             <div style={styles.profileTitle}>Verification History</div>
 
             {/* Date Selection and Toggle */}
@@ -148,7 +172,7 @@ const History = () => {
                                     </p>
                                     <p style={styles.labelTime}>
                                         <strong>Time:</strong>{' '}
-                                        {new Date(entry.timestamp).toLocaleTimeString()}
+                                        {new Date(entry.createdAt).toLocaleTimeString()}
                                     </p>
                                 </div>
                             </li>

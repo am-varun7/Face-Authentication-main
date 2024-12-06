@@ -4,6 +4,7 @@ const axios = require('axios');
 const FaceEmbedding = require('../models/FaceSchema');
 const FaceEmbeddingCNN = require('../models/FaceSchemaCNN');
 const fetchuser = require('../middleware/fetchuser');
+const VerificationData = require('../models/VerificationData');
 
 
 // Register Face - Calls Python service to generate embedding, then saves it in MongoDB
@@ -366,7 +367,54 @@ router.delete('/delete-labels/:label', fetchuser, async (req, res) => {
     }
 });
 
+router.post('/store-verification', fetchuser, async (req, res) => {
+    try {
+        const { labelName } = req.body;
 
+        if (!labelName) {
+            return res.status(400).json({ message: 'Label name is required.' });
+        }
+
+        // Get the start and end of the current day
+        const today = new Date();
+        const startOfDay = new Date(today.setHours(0, 0, 0, 0));
+        const endOfDay = new Date(today.setHours(23, 59, 59, 999));
+
+        // Check if a verification entry already exists for this user and label today
+        const existingVerification = await VerificationData.findOne({
+            user: req.user.id,
+            labelName,
+            createdAt: { $gte: startOfDay, $lte: endOfDay },
+        });
+
+        if (existingVerification) {
+            return res.status(400).json({ message: 'Already verified recently.' });
+        }
+
+        // Store new verification
+        const verification = new VerificationData({
+            user: req.user.id,
+            labelName,
+        });
+
+        await verification.save();
+        res.status(201).json({ message: 'Verification data stored successfully.' });
+    } catch (error) {
+        console.error('Error storing verification data:', error);
+        res.status(500).json({ message: 'Failed to store verification data.' });
+    }
+});
+
+router.get('/verification-history', fetchuser, async (req, res) => {
+    try {
+        const user = req.user.id; // Assuming middleware sets req.user
+        const history = await VerificationData.find({ user });
+        res.json({ history });
+    } catch (error) {
+        console.error('Error fetching verification history:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
 
 
 module.exports = router;

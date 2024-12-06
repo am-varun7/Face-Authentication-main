@@ -1,0 +1,219 @@
+/* Main container for the page */
+.crowd-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-image: url('../images/authenticatebg.avif'); /* Use your image path */
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+/* Upload container styling */
+.crowd-upload-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background-color: rgba(0, 0, 0, 0.6); /* Semi-transparent background */
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    width: 100%;
+    max-width: 500px; /* Adjust width for better control */
+    margin: 20px;
+    height: auto;
+    transition: transform 0.3s ease;
+}
+
+.crowd-upload-container:hover {
+    transform: translateY(-5px); /* Subtle hover effect */
+}
+
+/* Logs section styling */
+.logs-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background-color: rgba(0, 0, 0, 0.6); /* Semi-transparent background */
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    width: 100%;
+    max-width: 500px;
+    margin: 20px;
+    height: auto;
+}
+
+/* Title styling */
+.title {
+    font-size: 1.5rem; /* Adjust font size */
+    text-align: center;
+    margin-bottom: 20px;
+    color: #fff;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+/* Form styling */
+.upload-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    gap: 15px;
+}
+
+/* Section for file upload */
+.upload-section {
+    margin-bottom: 20px;
+    width: 100%;
+}
+
+/* File upload label styling */
+.file-upload-label {
+    font-size: 1.1rem;
+    margin-bottom: 8px;
+    color: #ddd;
+    font-weight: 600;
+}
+
+/* File input field styling */
+.file-upload-input {
+    padding: 10px;
+    font-size: 1rem;
+    border: 2px solid #ccc;
+    border-radius: 5px;
+    background-color: #fff;
+    color: #333;
+    width: 100%;
+    max-width: 350px;
+    transition: border 0.3s ease;
+}
+
+.file-upload-input:focus {
+    border-color: #4CAF50;
+}
+
+/* Preview section styling */
+.preview-section, .response-section, .output-video-section {
+    margin-top: 30px;
+}
+
+/* Section title styling */
+.section-title {
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+    color: #ddd;
+    font-weight: 600;
+}
+
+/* Video preview and output styling */
+.video-preview, .video-output {
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Button styling */
+.upload-button {
+    background-color: #007bff;
+    color: white;
+    padding: 12px 20px;
+    font-size: 1rem;
+    border-radius: 30px;
+    width: 100%;
+    max-width: 350px;
+    text-align: center;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    font-weight: 600;
+}
+
+.upload-button:disabled {
+    background-color: #aaa;
+    cursor: not-allowed;
+}
+
+.upload-button:hover {
+    background-color: #0056b3;
+    transform: translateY(-2px); /* Hover effect */
+}
+
+/* Logs section styling */
+.logs {
+    background-color: rgba(0, 0, 0, 0.4);
+    padding: 15px;
+    border-radius: 8px;
+    max-height: 300px;
+    overflow-y: auto;
+    color: greenyellow;
+}
+
+/* Individual log styling */
+.logs p {
+    font-size: 1rem;
+    margin: 5px 0;
+}
+
+/* Video link styling */
+.video-link {
+    font-size: 1.1rem;
+    color: #50d1f8;
+    text-decoration: none;
+    display: block;
+    margin-top: 15px;
+}
+
+.video-link:hover {
+    text-decoration: underline;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .crowd-container {
+        padding: 20px;
+    }
+
+    .crowd-upload-container,
+    .logs-section {
+        max-width: 100%;
+    }
+
+    .upload-button {
+        font-size: 0.9rem;
+        padding: 10px 18px;
+    }
+
+    .logs p {
+        font-size: 0.9rem;
+    }
+
+    .title {
+        font-size: 1.3rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .upload-button {
+        font-size: 0.8rem;
+        padding: 8px 16px;
+    }
+
+    .logs p {
+        font-size: 0.8rem;
+    }
+
+    .title {
+        font-size: 1.2rem;
+    }
+}

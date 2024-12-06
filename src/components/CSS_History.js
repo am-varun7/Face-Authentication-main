@@ -128,6 +128,26 @@ const styles = {
         color: '#333',
         marginLeft: '10px', // Adjusts space between label name and time
     },
+    backButton: {
+        position: 'absolute', // Fixed to a specific position
+        top: '20px',
+        left: '20px', // Align to the left
+        width: '6rem', // Fixed width
+        backgroundColor: '#ff6200', // Orange background
+        color: 'white', // White text
+        border: 'none', // No border
+        borderRadius: '30px', // Rounded corners
+        fontSize: '16px', // Font size
+        padding: '8px 16px', // Padding for better clickability
+        cursor: 'pointer', // Pointer cursor for interaction
+        transition: 'background-color 0.3s ease, transform 0.2s ease', // Smooth transitions
+        boxShadow: '0px 4px 6px rgba(0, 0, 0, 0.2)',
+        transform: 'translateY(3px)',
+    },
+    backButtonHover: {
+        backgroundColor: '#e05a00', // Slightly darker shade on hover
+        transform: 'translateY(-3px)', // Lift effect on hover
+    },
 };
 
 export default styles;

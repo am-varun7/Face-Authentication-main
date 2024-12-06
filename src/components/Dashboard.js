@@ -14,12 +14,7 @@ const Dashboard = () => {
     const toggleMenu = () => {
         setIsMenuOpen(!isMenuOpen);
     };
-    const handleIndiRegisterCNN =()=>{
-        navigate('/individualregistrationcnn')   
-       };
-       const handleIndiAuthCNN = ()=>{
-        navigate('/individualauthenticationcnn')
-    };
+    
 
     const handleLogout = (e) => {
         e.preventDefault();
@@ -30,16 +25,7 @@ const Dashboard = () => {
         document.getElementById('about').scrollIntoView({ behavior: 'smooth' });
     };
 
-    const handleIndiRegister = () => {
-        navigate('/individualregistration');
-    };
-
-    const handleIndiAuth = () => {
-        navigate('/individualauthentication');
-    };
-    const handlegroupAuth = () => {
-        navigate('/groupauthentication');
-    };
+   
     const [selectedModel, setSelectedModel] = useState(""); // To track the selected model
 
   const handleModelSelection = (model) => {
@@ -100,92 +86,106 @@ const Dashboard = () => {
                     </div>
                 </div>
                  {/* Features Section */}
-                 <div className="features" id="features">
-                    {/* Feature Cards */}
-                    <div className="feature-card">
-                        <img src={individualImage} alt="Individual Face" />
-                        <h5>Individual Face Authentication</h5>
-                        <p>Securely authenticate individual users with advanced facial recognition technology.</p>
-                        
-                        <div className="button-group">
-                            {/* Render model selection buttons if no model is selected */}
-                            {selectedModel === "" && (
-                            <>
-                                <button
-                                className="btn btn-primary m-2"
-                                onClick={() => handleModelSelection("pretrained")}
-                                >
-                                Use Pretrained Model
-                                </button>
-                                <button
-                                className="btn btn-primary m-2"
-                                onClick={() => {
-                                    alert("Warning!\nThe accuracy of this model is 75% ,for better accuracy use pre-trained model .");
-                                    handleModelSelection("cnn");
-                                    }
-                                }
-                                >
-                                Use Custom CNN Model
-                                </button>
-                            </>
-                            )}
+                 {/* Features Section */}
+<div className="features" id="features">
+    {/* Feature Cards */}
+    <div className="feature-card">
+        <img src={individualImage} alt="Individual Face" />
+        <h5>Individual Face Authentication</h5>
+        <p>Securely authenticate individual users with advanced facial recognition technology.</p>
+        
+        <div className="button-group">
+            {/* Render model selection buttons if no model is selected */}
+            {selectedModel === "" && (
+            <>
+                <button
+                className="btn btn-primary m-2"
+                onClick={() => handleModelSelection("pretrained")}
+                >
+                Use Pretrained Model
+                </button>
+                <button
+                className="btn btn-primary m-2"
+                onClick={() => {
+                    alert("Warning!\nThe accuracy of this model is 75% ,for better accuracy use pre-trained model .");
+                    handleModelSelection("cnn");
+                    }
+                }
+                >
+                Use Custom CNN Model
+                </button>
+            </>
+            )}
 
-                            {/* Render Pretrained Model options */}
-                            {selectedModel === "pretrained" && (
-                            <>
-                                <button className="btn btn-primary m-2" onClick={handleIndiRegister}>
-                                Register
-                                </button>
-                                <button className="btn btn-secondary m-2" onClick={handleIndiAuth}>
-                                Verify
-                                </button>
-                                <button className="btn btn-danger m-2" onClick={handleBack}>
-                                Back
-                                </button>
-                            </>
-                            )}
+            {/* Render Pretrained Model options */}
+            {selectedModel === "pretrained" && (
+            <>
+                <Link to="/individualregistration">
+                    <button className="btn btn-primary m-2">
+                        Register
+                    </button>
+                </Link>
+                <Link to="/individualauthentication">
+                    <button className="btn btn-secondary m-2">
+                        Verify
+                    </button>
+                </Link>
+                <button className="btn btn-danger m-2" onClick={handleBack}>
+                    Back
+                </button>
+            </>
+            )}
 
-                            {/* Render Custom CNN Model options */}
-                            {selectedModel === "cnn" && (
-                            <>
-                                <button
-                                className="btn btn-primary m-2"
-                                onClick={handleIndiRegisterCNN}
-                                >
-                                Register using custom model
-                                </button>
-                                <button
-                                className="btn btn-secondary m-2"
-                                onClick={handleIndiAuthCNN}
-                                >
-                                Verify using custom model
-                                </button>
-                                <button className="btn btn-danger m-2" onClick={handleBack}>
-                                Back
-                                </button>
-                            </>
-                            )}
-                        </div>
-                    </div>
+            {/* Render Custom CNN Model options */}
+            {selectedModel === "cnn" && (
+            <>
+                <Link to="/individualregistrationcnn">
+                    <button className="btn btn-primary m-2">
+                        Register using custom model
+                    </button>
+                </Link>
+                <Link to="/individualauthenticationcnn">
+                    <button className="btn btn-secondary m-2">
+                        Verify using custom model
+                    </button>
+                </Link>
+                <button className="btn btn-danger m-2" onClick={handleBack}>
+                    Back
+                </button>
+            </>
+            )}
+        </div>
+    </div>
 
-                    <div className="feature-card">
-                        <img src={GroupImage} alt="Group Authentication" />
-                        <h5>Group Authentication</h5>
-                        <p>Authenticate multiple users simultaneously in a single image with precision.</p>
-                        <div className="button-group">
-                            <button className="btn btn-secondary" onClick={handlegroupAuth}>Verify mtcnn</button>
-                        </div>
-                    </div>
+    <div className="feature-card">
+        <img src={GroupImage} alt="Group Authentication" />
+        <h5>Group Authentication</h5>
+        <p>Authenticate multiple users simultaneously in a single image with precision.</p>
+        <div className="button-group">
+            <Link to="/groupauthentication">
+                <button className="btn btn-secondary">Verify mtcnn</button>
+            </Link>
+        </div>
+    </div>
 
-                    <div className="feature-card">
-                        <img src={CrowdImage} alt="Crowd Analysis" />
-                        <h5>Crowd Analysis</h5>
-                        <p>Analyze and count faces in dense crowds with cutting-edge detection algorithms.</p>
-                        <div className="button-group">
-                            <button className="btn btn-primary">Start</button>
-                        </div>
-                    </div>
-                </div>
+    <div className="feature-card">
+        <img src={CrowdImage} alt="Crowd Analysis" />
+        <h5>Crowd Analysis</h5>
+        <p>Analyze and count faces in dense crowds with cutting-edge detection algorithms.</p>
+        <div className="button-group">
+            {/* Button for image redirection */}
+            <Link to="/crowdimage">
+                <button className="btn btn-primary">Image</button>
+            </Link>
+            
+            {/* Button for video redirection */}
+            <Link to="/crowd">
+                <button className="btn btn-primary">Video</button>
+            </Link>
+        </div>
+    </div>
+</div>
+
 
                 {/* About Section */}
                 <div className="about-section" id="about">

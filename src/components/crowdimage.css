@@ -1,0 +1,246 @@
+/* General Page Styling */
+.detection-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    width: 100%;
+    background-image: url('../images/authenticatebg.avif'); /* Replace with your image path */
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    color: #fff;
+    padding: 2rem;
+    box-sizing: border-box;
+}
+
+/* Detection Container Styling */
+.detection-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem; /* Reduced padding */
+    background-color: rgba(0, 0, 0, 0.6); /* Semi-transparent background */
+    border-radius: 12px;
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 500px; /* Adjusted max-width */
+    margin: 20px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    height: auto; /* Ensures container height is flexible */
+}
+
+/* Header Styling */
+.detection-header {
+    font-size: 1.4rem; /* Slightly reduced font size */
+    font-weight: 600;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 1px; /* Reduced letter spacing */
+    background-color: rgba(0, 0, 0, 0.7);
+    padding: 12px 18px; /* Adjusted padding */
+    border-radius: 25px;
+    margin-bottom: 15px; /* Reduced margin */
+    width: 85%;
+    max-width: 320px; /* Slightly smaller max-width */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    transition: transform 0.2s ease;
+}
+
+.detection-header:hover {
+    transform: translateY(-5px);
+}
+
+/* Form Styling */
+.detection-form {
+    background-color: rgba(0, 0, 0, 0.4);
+    border-radius: 12px;
+    padding: 18px; /* Reduced padding */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    width: 100%;
+    max-width: 450px;
+    margin-bottom: 15px; /* Reduced margin */
+}
+
+/* File Upload Section */
+.file-upload-section {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 15px; /* Reduced margin */
+}
+
+.file-input {
+    padding: 8px; /* Reduced padding */
+    font-size: 1rem;
+    border: 2px solid #ccc;
+    border-radius: 5px;
+    width: 100%;
+    max-width: 350px; /* Reduced max-width */
+}
+
+/* Preview Section */
+.image-preview {
+    text-align: center;
+    margin: 15px 0; /* Reduced margin */
+}
+
+.preview-title {
+    font-size: 1.2rem;
+    color: #ddd;
+    margin-bottom: 10px;
+}
+
+.preview-image {
+    max-width: 100%;
+    height: auto;
+    border: 2px solid #ddd;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Button Styles */
+.upload-button,
+.output-button {
+    padding: 10px 18px; /* Reduced padding */
+    font-size: 1rem; /* Slightly smaller font size */
+    border-radius: 30px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+    max-width: 350px; /* Reduced max-width */
+    text-align: center;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    margin: 10px auto;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.upload-button:hover,
+.output-button:hover {
+    background-color: #0056b3;
+    transform: translateY(-2px);
+}
+
+.button-disabled {
+    background-color: #aaa;
+    cursor: not-allowed;
+}
+
+/* Detection Results Section */
+.detection-results {
+    margin-top: 25px; /* Reduced margin */
+    padding: 18px; /* Reduced padding */
+    background-color: rgba(0, 0, 0, 0.6);
+    border-radius: 12px;
+    color: #fff;
+    max-width: 500px; /* Adjusted max-width */
+    width: 100%;
+    height: auto;
+    text-align: center;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    transition: transform 0.2s ease;
+}
+
+.detection-results:hover {
+    transform: translateY(-5px);
+}
+
+.results-title {
+    font-size: 1.4rem; /* Reduced font size */
+    color: #50d1f8;
+    margin-bottom: 10px;
+}
+
+.results-text {
+    font-size: 1.1rem; /* Slightly smaller font size */
+    margin-bottom: 15px;
+}
+
+/* Output Preview Section */
+.output-preview {
+    margin-top: 15px; /* Reduced margin */
+    text-align: center;
+}
+
+.output-title {
+    font-size: 1.1rem; /* Reduced font size */
+    color: #ddd;
+    margin-bottom: 10px;
+}
+
+.output-image {
+    max-width: 100%;
+    height: auto;
+    border: 2px solid #50d1f8;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+    .detection-container {
+        max-width: 450px; /* Adjust max-width for medium screens */
+    }
+
+    .upload-button,
+    .output-button {
+        font-size: 0.9rem; /* Slightly smaller font size for medium screens */
+    }
+
+    .file-input {
+        font-size: 0.9rem; /* Smaller font size for file input */
+    }
+}
+
+@media (max-width: 768px) {
+
+    .detection-header {
+        font-size: 1.3rem; /* Slightly reduced font size */
+        width: 90%;
+    }
+
+    .detection-form {
+        padding: 16px;
+        max-width: 100%;
+    }
+
+    .upload-button,
+    .output-button {
+        font-size: 1rem;
+        padding: 10px 18px;
+    }
+
+    .results-title,
+    .results-text {
+        font-size: 1rem; /* Smaller text for medium screens */
+    }
+
+    .output-image {
+        border: 2px solid #ccc;
+    }
+}
+
+/* Small screen adjustments */
+@media (max-width: 480px) {
+    .detection-container,
+    .detection-results {
+        max-width: 90%; /* More width on small screens */
+        margin: 15px auto;
+    }
+
+    .detection-header {
+        font-size: 1.5rem; /* Larger font size for small screens */
+    }
+
+    .upload-button,
+    .output-button {
+        max-width: 100%; /* Ensure buttons take full width */
+    }
+
+    .file-input {
+        font-size: 0.9rem; /* Adjust file input size */
+    }
+}

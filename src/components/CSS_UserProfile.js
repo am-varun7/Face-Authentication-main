@@ -251,6 +251,17 @@ const styles = {
         textAlign: 'center',
         marginTop: '16px',
     },
+    viewHistoryButton : {
+        padding: '10px 20px',
+        backgroundColor: '#4CAF50', // Green background
+        color: 'white',
+        border: 'none',
+        borderRadius: '5px',
+        cursor: 'pointer',
+        marginTop: '20px',
+        textAlign: 'center',
+    },
+    
     
 };
 

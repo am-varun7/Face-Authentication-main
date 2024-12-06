@@ -111,161 +111,166 @@ const UserProfile = () => {
         navigate('/login');
     };
 
+    const handleHistoryClick = () => {
+        navigate('/history');  // Navigate to /history page
+    };
+
     return (
-        
-            <div style={styles.container}>
-                <div style={styles.logoutButtonContainer}>
-                    <button
-                        style={styles.logoutButton}
-                        className="logoutbutton"
-                        onMouseEnter={(e) => Object.assign(e.target.style, styles.logoutButtonHover)}
-                        onMouseLeave={(e) => Object.assign(e.target.style, styles.logoutButton)}
-                        onClick={handleLogout}
-                    >
-                        Log out
-                    </button>
-                </div>
+        <div style={styles.container}>
+            <div style={styles.logoutButtonContainer}>
                 <button
-                    onClick={handleBack}
-                    style={styles.backButton}
-                    onMouseEnter={(e) => Object.assign(e.target.style, styles.backButtonHover)}
-                    onMouseLeave={(e) => Object.assign(e.target.style, styles.backButton)}
+                    style={styles.logoutButton}
+                    className="logoutbutton"
+                    onMouseEnter={(e) => Object.assign(e.target.style, styles.logoutButtonHover)}
+                    onMouseLeave={(e) => Object.assign(e.target.style, styles.logoutButton)}
+                    onClick={handleLogout}
                 >
-                    &lt; Back
+                    Log out
                 </button>
-                <div style={styles.profileTitle}>User Profile</div>
-                {userData ? (
-                    <div>
-                        <div style={styles.profileHeader}>
-                            {userData.profilePhoto ? (
-                                <img
-                                    src={userData.profilePhoto}
-                                    alt="Profile"
-                                    style={styles.profilePhoto}
-                                />
+            </div>
+            <button
+                onClick={handleBack}
+                style={styles.backButton}
+                onMouseEnter={(e) => Object.assign(e.target.style, styles.backButtonHover)}
+                onMouseLeave={(e) => Object.assign(e.target.style, styles.backButton)}
+            >
+                &lt; Back
+            </button>
+            <div style={styles.profileTitle}>User Profile</div>
+            {userData ? (
+                <div>
+                    <div style={styles.profileHeader}>
+                        {userData.profilePhoto ? (
+                            <img
+                                src={userData.profilePhoto}
+                                alt="Profile"
+                                style={styles.profilePhoto}
+                            />
+                        ) : (
+                            <div style={styles.initialsCircle}>
+                                {getInitials(userData.name)}
+                            </div>
+                        )}
+                        <div
+                            style={styles.profileDetails}
+                            onMouseEnter={() => setShowEditIcon(true)}
+                            onMouseLeave={() => setShowEditIcon(false)}
+                        >
+                            {editMode ? (
+                                <div style={styles.editNameContainer}>
+                                    <input
+                                        type="text"
+                                        value={updatedName}
+                                        onChange={(e) => setUpdatedName(e.target.value)}
+                                        style={styles.nameInput}
+                                    />
+                                    <button onClick={handleUpdateName} style={styles.saveButton}>
+                                        Save
+                                    </button>
+                                </div>
                             ) : (
-                                <div style={styles.initialsCircle}>
-                                    {getInitials(userData.name)}
+                                <div style={styles.nameContainer}>
+                                    <h3 style={styles.name}>{userData.name}</h3>
+                                    {showEditIcon && (
+                                        <button
+                                            style={styles.editButton}
+                                            onClick={() => setEditMode(true)}
+                                        >
+                                            ✎
+                                        </button>
+                                    )}
                                 </div>
                             )}
-                            <div
-                                style={styles.profileDetails}
-                                onMouseEnter={() => setShowEditIcon(true)}
-                                onMouseLeave={() => setShowEditIcon(false)}
-                            >
-                                {editMode ? (
-                                    <div style={styles.editNameContainer}>
-                                        <input
-                                            type="text"
-                                            value={updatedName}
-                                            onChange={(e) => setUpdatedName(e.target.value)}
-                                            style={styles.nameInput}
-                                        />
-                                        <button onClick={handleUpdateName} style={styles.saveButton}>
-                                            Save
-                                        </button>
-                                    </div>
-                                ) : (
-                                    <div style={styles.nameContainer}>
-                                        <h3 style={styles.name}>{userData.name}</h3>
-                                        {showEditIcon && (
-                                            <button
-                                                style={styles.editButton}
-                                                onClick={() => setEditMode(true)}
-                                            >
-                                                ✎
-                                            </button>
-                                        )}
-                                    </div>
-                                )}
-                                <p style={styles.email}>Email: {userData.email}</p>
-                            </div>
-                            <button
-                                style={styles.addLabelButton}
-                                onClick={() => navigate('/model-selection')}
-                            >
-                                Add Label
-                            </button>
+                            <p style={styles.email}>Email: {userData.email}</p>
                         </div>
-                        {/* For CNN model Face Labels */}
-                        <h4 style={styles.labelsHeader}>
-                            Registered Face Labels [PTM]
-                            <button
-                                style={styles.arrowButton}
-                                onClick={() => setShowLabels(!showLabels)}
-                            >
-                                {showLabels ? '▲' : '▼'}
-                            </button>
-                        </h4>
-    
-                        {showLabels && (
-                            <ul style={styles.labelList}>
-                                {labels.length > 0 ? (
-                                    labels.map((label, index) => (
-                                        <li
-                                            key={index}
-                                            style={{ ...styles.labelItem, ...styles.labelItemRow }}
-                                        >
-                                            <span style={styles.labelText}>{label}</span>
-                                            <button
-                                                style={styles.deleteButton}
-                                                onClick={() => handleDeleteLabel(label, 'CNN')}
-                                            >
-                                                Remove
-                                            </button>
-                                        </li>
-                                    ))
-                                ) : (
-                                    <p style={styles.noLabels}>No labels registered yet.</p>
-                                )}
-                            </ul>
-                        )}
-    
-                        {/* For Pre-Trained model Face Labels */}
-                        <h4 style={styles.labelsHeader}>
-                            Registered Face Labels [CNN]
-                            <button
-                                style={styles.arrowButton}
-                                onClick={() => setShowPLabels(!showPLabels)}
-                            >
-                                {showPLabels ? '▲' : '▼'}
-                            </button>
-                        </h4>
-                        {showPLabels && (
-                            <ul style={styles.labelList}>
-                                {plabels.length > 0 ? (
-                                    plabels.map((label, index) => (
-                                        <li
-                                            key={index}
-                                            style={{ ...styles.labelItem, ...styles.labelItemRow }}
-                                        >
-                                            <span style={styles.labelText}>{label}</span>
-                                            <button
-                                                style={styles.deleteButton}
-                                                onClick={() => handleDeleteLabel(label, 'PTM')}
-                                            >
-                                                Remove
-                                            </button>
-                                        </li>
-                                    ))
-                                ) : (
-                                    <p style={styles.noLabels}>No PTM labels registered yet.</p>
-                                )}
-                            </ul>
-                        )}
+                        <button
+                            style={styles.addLabelButton}
+                            onClick={() => navigate('/model-selection')}
+                        >
+                            Add Label
+                        </button>
                     </div>
-                ) : (
-                    <p style={styles.noData}>No user data available.</p>
-                )}
+                    {/* For CNN model Face Labels */}
+                    <h4 style={styles.labelsHeader}>
+                        Registered Face Labels [PTM]
+                        <button
+                            style={styles.arrowButton}
+                            onClick={() => setShowLabels(!showLabels)}
+                        >
+                            {showLabels ? '▲' : '▼'}
+                        </button>
+                    </h4>
 
-                
+                    {showLabels && (
+                        <ul style={styles.labelList}>
+                            {labels.length > 0 ? (
+                                labels.map((label, index) => (
+                                    <li
+                                        key={index}
+                                        style={{ ...styles.labelItem, ...styles.labelItemRow }}
+                                    >
+                                        <span style={styles.labelText}>{label}</span>
+                                        <button
+                                            style={styles.deleteButton}
+                                            onClick={() => handleDeleteLabel(label, 'CNN')}
+                                        >
+                                            Remove
+                                        </button>
+                                    </li>
+                                ))
+                            ) : (
+                                <p style={styles.noLabels}>No labels registered yet.</p>
+                            )}
+                        </ul>
+                    )}
 
+                    {/* For Pre-Trained model Face Labels */}
+                    <h4 style={styles.labelsHeader}>
+                        Registered Face Labels [CNN]
+                        <button
+                            style={styles.arrowButton}
+                            onClick={() => setShowPLabels(!showPLabels)}
+                        >
+                            {showPLabels ? '▲' : '▼'}
+                        </button>
+                    </h4>
+                    {showPLabels && (
+                        <ul style={styles.labelList}>
+                            {plabels.length > 0 ? (
+                                plabels.map((label, index) => (
+                                    <li
+                                        key={index}
+                                        style={{ ...styles.labelItem, ...styles.labelItemRow }}
+                                    >
+                                        <span style={styles.labelText}>{label}</span>
+                                        <button
+                                            style={styles.deleteButton}
+                                            onClick={() => handleDeleteLabel(label, 'PTM')}
+                                        >
+                                            Remove
+                                        </button>
+                                    </li>
+                                ))
+                            ) : (
+                                <p style={styles.noLabels}>No PTM labels registered yet.</p>
+                            )}
+                        </ul>
+                    )}
 
-            </div>
-            
-        
-
+                    {/* View History Button */}
+                    <button
+                        style={styles.viewHistoryButton}
+                        onClick={handleHistoryClick}
+                    >
+                        View History
+                    </button>
+                </div>
+            ) : (
+                <p style={styles.noData}>No user data available.</p>
+            )}
+        </div>
     );
+
 };
 
 export default UserProfile;

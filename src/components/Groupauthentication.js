@@ -95,6 +95,17 @@ const GroupAuthentication = () => {
                         setPersonsIdentified((prev) => {
                             const isPersonExist = prev.some((p) => p.name === person.name);
                             if (!isPersonExist) {
+                                const storeVerificationResponse =  fetch(
+                                    "http://localhost:5000/api/face/store-verification",
+                                    {
+                                      method: "POST",
+                                      headers: {
+                                        "Content-Type": "application/json",
+                                        "auth-token": localStorage.getItem("token"), // Ensure the token is correctly set
+                                      },
+                                      body: JSON.stringify({ labelName: person.name }), // Ensure result.name has the expected value
+                                    }
+                                  );
                                 return [
                                     ...prev,
                                     { name: person.name, image: dataUrl },
@@ -107,6 +118,8 @@ const GroupAuthentication = () => {
                 } else {
                     setMessage("Faces detected but not recognized.");
                 }
+
+                
             } else {
                 setMessage("Error in authentication.");
             }

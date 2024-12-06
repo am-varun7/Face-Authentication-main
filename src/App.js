@@ -12,6 +12,9 @@ import IndividualRegCNN from './components/IndividualRegCNN';
 import UserProfile from './components/UserProfile';
 import GroupAuthentication from './components/GroupAuthentication';
 import History from './components/History';
+import CrowdUpload from './components/CrowdUpload';
+import Crowdimage from './components/crowdimage';
+
 
 function App() {
   const [alert, setAlert] = useState(null);
@@ -46,6 +49,8 @@ function App() {
           <Route path="/groupauthentication" element={<GroupAuthentication />} />
           <Route path="/userprofile" element={<UserProfile />} />
           <Route path="/history" element={<History />} />
+          <Route path='/crowd' element={<CrowdUpload/>}/>
+          <Route path='/crowdimage' element={<Crowdimage/>}/>
         </Routes>
       </BrowserRouter>
     </>

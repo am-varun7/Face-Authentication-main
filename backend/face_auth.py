@@ -50,6 +50,13 @@ def generate_embedding():
         if len(faces) == 0:
             # No face detected
             return jsonify({"faceDetected": False, "message": "No face detected"}), 200
+        
+        if len(faces) > 1:
+            # Multiple faces detected
+            return jsonify({
+                "faceDetected": False,
+                "message": "Multiple faces detected. Please adjust the camera to capture only one face."
+            }), 200
 
         # Process the first detected face (adjust if you want to handle multiple faces)
         (x, y, w, h) = faces[0]
