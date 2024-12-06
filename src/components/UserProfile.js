@@ -108,7 +108,8 @@ const UserProfile = () => {
     };
     const handleLogout = (e) => {
         e.preventDefault();
-        navigate('/login');
+        sessionStorage.removeItem('token'); // Clear the authentication token
+        navigate('/login'); // Redirect to the login page
     };
 
     const handleHistoryClick = () => {
