@@ -9,17 +9,20 @@
   z-index: -1;
 }
 
-/* Login/signup box container */
+/* Signup box container */
 .signup-container {
   background: rgba(255, 255, 255, 0.9);
-  max-width: 400px;
+  width: 100%; /* Set width to 100% for responsiveness */
+  max-width: 400px; /* Limit max width */
   position: absolute;
   top: 10%;
-  right: 5%;
+  right: 5%; /* Align to the right */
+  left: auto; /* Reset left to auto */
   padding: 30px 40px;
   border-radius: 15px;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
   animation: signup-fadeInRight 0.8s ease-out;
+  box-sizing: border-box; /* Ensure padding is included in width calculation */
 }
 
 /* Fade-in animation */
@@ -115,3 +118,52 @@
   box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
   transition: all 0.3s ease;
 }
+
+/* Responsive Styles */
+
+/* For tablets (max-width: 768px) */
+@media (max-width: 768px) {
+  .signup-container {
+    width: 90%;
+    right: 5%; /* Keep it aligned to the right */
+    padding: 20px 30px;
+  }
+
+  .signup-container h1 {
+    font-size: 24px;
+  }
+
+  .signup-form-control {
+    padding: 10px;
+  }
+
+  .signup-button {
+    font-size: 14px;
+    padding: 10px;
+  }
+}
+
+/* For mobile (max-width: 480px) */
+@media (max-width: 480px) {
+  .signup-container {
+    width: 95%;
+    right: 2%; /* Adjust to give some space from the right edge */
+    padding: 15px;
+  }
+
+  .signup-container h1 {
+    font-size: 20px;
+  }
+
+  .signup-form-control {
+    padding: 8px;
+    font-size: 12px;
+  }
+
+  .signup-button {
+    padding: 8px;
+    font-size: 12px;
+  }
+}
+
+/* For very small screens (max-width: 360px) */

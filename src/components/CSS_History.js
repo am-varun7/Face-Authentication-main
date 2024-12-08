@@ -3,13 +3,15 @@ const styles = {
         fontFamily: 'Kumbh Sans, sans-serif',
         maxWidth: '600px',
         margin: '0 auto',
-        padding: '20px',
-        // backgroundColor: '#f8f8f8',
+        padding: '20px 20px 20px 20px', // Make sure padding values are defined for all sides
         backgroundColor: '#fff',
         borderRadius: '10px',
         boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)',
-        marginTop: '30px',
+        marginTop: '90px',
+        width: '100%',
+        paddingTop: '30px', // Adds internal padding at the top
     },
+    
     profileTitle: {
         fontSize: '24px',
         fontWeight: '700',
@@ -25,6 +27,7 @@ const styles = {
         justifyContent: 'flex-start',
         gap: '10px',
         marginBottom: '20px',
+        flexWrap: 'wrap', // This ensures buttons stack when space is limited
     },
     dateToggleButton: {
         padding: '8px 15px',
@@ -35,6 +38,8 @@ const styles = {
         cursor: 'pointer',
         fontSize: '16px',
         transition: 'background-color 0.3s',
+        minWidth: '100px', // Ensure buttons don't shrink too small
+        textAlign: 'center',
     },
     selectDateToggleButton: {
         padding: '10px 20px',
@@ -45,17 +50,18 @@ const styles = {
         borderRadius: '25px',
         cursor: 'pointer',
         transition: 'background-color 0.3s ease',
-        marginLeft: '200px', // Aligns the button to the right
+        marginLeft: 'auto', // Align button to the right
+        minWidth: '150px', // Minimum width for select button
     },
     dateToggleButtonHover: {
         backgroundColor: '#45a049',
     },
     calendarWrapper: {
         marginTop: '10px',
+        position: 'relative',
     },
     historySection: {
         marginTop: '30px',
-        // backgroundColor: '#f9f9f9',
         padding: '15px',
         borderRadius: '10px',
         boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
@@ -74,7 +80,6 @@ const styles = {
         margin: '0',
     },
     labelItem: {
-        // backgroundColor: '#ffffff',
         backgroundColor: '#f7f7f7',
         marginBottom: '10px',
         padding: '15px',
@@ -113,6 +118,7 @@ const styles = {
         fontSize: '16px',
         borderRadius: '5px',
         marginTop: '10px',
+        width: '100%', // Full width for better responsiveness
     },
     calendarButtonHover: {
         backgroundColor: '#0056b3',
@@ -126,27 +132,87 @@ const styles = {
     labelTime: {
         fontSize: '14px',
         color: '#333',
-        marginLeft: '10px', // Adjusts space between label name and time
+        marginLeft: '10px',
     },
     backButton: {
-        position: 'absolute', // Fixed to a specific position
+        position: 'absolute',
         top: '20px',
-        left: '20px', // Align to the left
-        width: '6rem', // Fixed width
-        backgroundColor: '#ff6200', // Orange background
-        color: 'white', // White text
-        border: 'none', // No border
-        borderRadius: '30px', // Rounded corners
-        fontSize: '16px', // Font size
-        padding: '8px 16px', // Padding for better clickability
-        cursor: 'pointer', // Pointer cursor for interaction
-        transition: 'background-color 0.3s ease, transform 0.2s ease', // Smooth transitions
+        left: '20px',
+        width: '6rem',
+        backgroundColor: '#ff6200',
+        color: 'white',
+        border: 'none',
+        borderRadius: '30px',
+        fontSize: '16px',
+        padding: '8px 16px',
+        cursor: 'pointer',
+        transition: 'background-color 0.3s ease, transform 0.2s ease',
         boxShadow: '0px 4px 6px rgba(0, 0, 0, 0.2)',
         transform: 'translateY(3px)',
     },
     backButtonHover: {
-        backgroundColor: '#e05a00', // Slightly darker shade on hover
-        transform: 'translateY(-3px)', // Lift effect on hover
+        backgroundColor: '#e05a00',
+        transform: 'translateY(-3px)',
+    },
+
+    // Media Queries for Responsiveness
+    '@media (max-width: 768px)': {
+        container: {
+            maxWidth: '90%',
+            padding: '15px',
+        },
+        profileTitle: {
+            fontSize: '20px',
+        },
+        historyTitle: {
+            fontSize: '18px',
+        },
+        dateToggleContainer: {
+            flexDirection: 'column',
+            alignItems: 'flex-start',
+        },
+        selectDateToggleButton: {
+            marginLeft: '0',
+            marginTop: '10px',
+        },
+        backButton: {
+            width: '5rem',
+            fontSize: '14px',
+            padding: '6px 12px',
+        },
+        calendarButton: {
+            width: 'auto', // Allow the button to adjust based on content
+            fontSize: '14px',
+            padding: '8px 16px',
+        },
+    },
+    '@media (max-width: 480px)': {
+        container: {
+            maxWidth: '100%',
+            padding: '10px',
+        },
+        profileTitle: {
+            fontSize: '18px',
+        },
+        historyTitle: {
+            fontSize: '16px',
+        },
+        labelItem: {
+            padding: '10px',
+        },
+        dateToggleButton: {
+            fontSize: '14px',
+            padding: '6px 12px',
+        },
+        backButton: {
+            width: '4rem',
+            fontSize: '12px',
+            padding: '6px 10px',
+        },
+        calendarButton: {
+            padding: '6px 12px',
+            fontSize: '12px',
+        },
     },
 };
 

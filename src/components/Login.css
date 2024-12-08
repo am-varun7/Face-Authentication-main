@@ -1,133 +1,159 @@
 /* Reset styles */
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
-  
-  /* Background video styles */
-  .facerecs-video-background {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    overflow: hidden;
-    z-index: -1;
-  }
-  
-  #facerecs-background-video {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-  
-  /* Login container styles */
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Background video styles */
+.facerecs-video-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  z-index: -1;
+}
+
+#facerecs-background-video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Login container styles */
+.facerecs-login-container {
+  position: absolute;
+  top: 50%; /* Centers the box vertically */
+  right: 5%; /* Moves the box to the right corner */
+  transform: translateY(-50%); /* Corrects vertical alignment */
+  width: 400px; /* Fixed width */
+  padding: 40px;
+  background: rgba(255, 255, 255, 0.85); /* Light, semi-transparent white */
+  border-radius: 12px; /* Rounded corners */
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2); /* Soft shadow for depth */
+  text-align: center;
+  transition: transform 0.3s ease;
+}
+
+.facerecs-login-container:hover {
+  transform: translateY(-50%) scale(1.05); /* Slight zoom effect on hover */
+}
+
+/* Heading styles */
+.facerecs-login-heading {
+  font-size: 2.2rem;
+  margin-bottom: 20px;
+  color: #333;
+  font-family: 'Roboto', sans-serif; /* Modern font */
+  font-weight: 500;
+}
+
+/* Form group styles */
+.facerecs-form-group {
+  margin-bottom: 20px;
+  text-align: left;
+}
+
+.facerecs-form-label {
+  font-size: 1rem;
+  margin-bottom: 8px;
+  display: block;
+  color: #333;
+  font-weight: 600;
+}
+
+.facerecs-form-input {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 1rem;
+  color: #333;
+  background-color: #f9f9f9; /* Light background for inputs */
+  transition: border 0.3s ease;
+}
+
+.facerecs-form-input:focus {
+  border-color: #007bff; /* Blue border on focus */
+  outline: none;
+}
+
+/* Button styles */
+.facerecs-btn {
+  width: 100%;
+  padding: 12px;
+  background-color: #007bff; /* Blue button */
+  border: none;
+  color: white;
+  font-size: 1.1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  font-weight: 600;
+}
+
+.facerecs-btn:hover {
+  background-color: #0056b3; /* Darker blue on hover */
+}
+
+/* Signup link styles */
+.facerecs-signup-text {
+  margin-top: 20px;
+  font-size: 0.9rem;
+  color: #333;
+}
+
+.facerecs-signup-link {
+  color: #007bff;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.facerecs-signup-link:hover {
+  text-decoration: underline;
+}
+
+/* Icon style for the input field */
+.facerecs-input-icon {
+  position: absolute;
+  top: 50%;
+  left: 10px;
+  transform: translateY(-50%);
+  font-size: 1.2rem;
+  color: #aaa;
+}
+
+/* Container for input fields with icons */
+.facerecs-input-container {
+  position: relative;
+  margin-bottom: 20px;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+  /* Adjust login container for smaller screens */
   .facerecs-login-container {
-    position: absolute;
-    top: 50%; /* Centers the box vertically */
-    right: 5%; /* Moves the box to the right corner */
-    transform: translateY(-50%); /* Corrects vertical alignment */
-    width: 400px; /* Fixed width */
-    padding: 40px;
-    background: rgba(255, 255, 255, 0.85); /* Light, semi-transparent white */
-    border-radius: 12px; /* Rounded corners */
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2); /* Soft shadow for depth */
-    text-align: center;
-    transition: transform 0.3s ease;
+    width: 90%; /* 90% width for smaller screens */
+    padding: 20px;
   }
-  
-  .facerecs-login-container:hover {
-    transform: translateY(-50%) scale(1.05); /* Slight zoom effect on hover */
-  }
-  
-  /* Heading styles */
+
+  /* Reduce font size for heading */
   .facerecs-login-heading {
-    font-size: 2.2rem;
-    margin-bottom: 20px;
-    color: #333;
-    font-family: 'Roboto', sans-serif; /* Modern font */
-    font-weight: 500;
+    font-size: 1.8rem;
   }
-  
-  /* Form group styles */
-  .facerecs-form-group {
-    margin-bottom: 20px;
-    text-align: left;
-  }
-  
-  .facerecs-form-label {
-    font-size: 1rem;
-    margin-bottom: 8px;
-    display: block;
-    color: #333;
-    font-weight: 600;
-  }
-  
+
+  /* Adjust form input padding and font size */
   .facerecs-form-input {
-    width: 100%;
-    padding: 12px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    font-size: 1rem;
-    color: #333;
-    background-color: #f9f9f9; /* Light background for inputs */
-    transition: border 0.3s ease;
-  }
-  
-  .facerecs-form-input:focus {
-    border-color: #007bff; /* Blue border on focus */
-    outline: none;
-  }
-  
-  /* Button styles */
-  .facerecs-btn {
-    width: 100%;
-    padding: 12px;
-    background-color: #007bff; /* Blue button */
-    border: none;
-    color: white;
-    font-size: 1.1rem;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    font-weight: 600;
-  }
-  
-  .facerecs-btn:hover {
-    background-color: #0056b3; /* Darker blue on hover */
-  }
-  
-  /* Signup link styles */
-  .facerecs-signup-text {
-    margin-top: 20px;
+    padding: 10px;
     font-size: 0.9rem;
-    color: #333;
   }
-  
-  .facerecs-signup-link {
-    color: #007bff;
-    text-decoration: none;
-    font-weight: 500;
+
+  /* Adjust button size */
+  .facerecs-btn {
+    padding: 10px;
+    font-size: 1rem;
   }
-  
-  .facerecs-signup-link:hover {
-    text-decoration: underline;
-  }
-  
-  /* Icon style for the input field */
-  .facerecs-input-icon {
-    position: absolute;
-    top: 50%;
-    left: 10px;
-    transform: translateY(-50%);
-    font-size: 1.2rem;
-    color: #aaa;
-  }
-  
-  /* Container for input fields with icons */
-  .facerecs-input-container {
-    position: relative;
-    margin-bottom: 20px;
-  }
-  
+}
+

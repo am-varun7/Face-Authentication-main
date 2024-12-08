@@ -116,7 +116,7 @@ const IndividualRegCNN = () => {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
-                    "auth-token": localStorage.getItem("token"), // Include user token for authentication
+                    "auth-token": sessionStorage.getItem("token"), // Include user token for authentication
                 },
                 body: JSON.stringify(requestBody),
             });

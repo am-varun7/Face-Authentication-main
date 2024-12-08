@@ -81,7 +81,7 @@ const GroupAuthentication = () => {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
-                    "auth-token": localStorage.getItem("token"),
+                    "auth-token": sessionStorage.getItem("token"),
                 },
                 body: JSON.stringify({ embeddings }),
             });
@@ -101,7 +101,7 @@ const GroupAuthentication = () => {
                                       method: "POST",
                                       headers: {
                                         "Content-Type": "application/json",
-                                        "auth-token": localStorage.getItem("token"), // Ensure the token is correctly set
+                                        "auth-token": sessionStorage.getItem("token"), // Ensure the token is correctly set
                                       },
                                       body: JSON.stringify({ labelName: person.name }), // Ensure result.name has the expected value
                                     }

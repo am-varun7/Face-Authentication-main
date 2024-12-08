@@ -44,45 +44,46 @@ const Login = (props) => {
   return (
     <>
       <div className="facerecs-video-background">
-        <video autoPlay muted loop id="facerecs-background-video">
-          <source src={Backgroundvideo} type="video/mp4" />
-          Your browser does not support the video tag.
-        </video>
-      </div>
-      <div className="facerecs-login-container">
-        <h1 className="facerecs-login-heading" style={{ fontFamily: 'Orbitron' }}>FaceRecs</h1>
-        <form onSubmit={handleSubmit}>
-          <div className="facerecs-form-group">
-            <label htmlFor="email" className="facerecs-form-label">Email address</label>
-            <input
-              type="email"
-              className="facerecs-form-input"
-              id="email"
-              name="email"
-              value={credentials.email}
-              onChange={onChange}
-              required
-            />
-            <small id="emailHelp" className="facerecs-form-text">We'll never share your email with anyone else.</small>
-          </div>
-          <div className="facerecs-form-group">
-            <label htmlFor="password" className="facerecs-form-label">Password</label>
-            <input
-              type="password"
-              className="facerecs-form-input"
-              id="password"
-              name="password"
-              value={credentials.password}
-              onChange={onChange}
-              required
-            />
-          </div>
-          <button type="submit" className="facerecs-btn">Login</button>
-        </form>
-        <p className="facerecs-signup-text">
-          Don't have an account? <Link to="/" className="facerecs-signup-link">Signup</Link>
-        </p>
-      </div>
+  <video autoPlay muted loop id="facerecs-background-video">
+    <source src={Backgroundvideo} type="video/mp4" />
+    Your browser does not support the video tag.
+  </video>
+</div>
+<div className="facerecs-login-container">
+  <h1 className="facerecs-login-heading" style={{ fontFamily: 'Orbitron' }}>FaceRecs</h1>
+  <form onSubmit={handleSubmit}>
+    <div className="facerecs-form-group">
+      <label htmlFor="email" className="facerecs-form-label">Email address</label>
+      <input
+        type="email"
+        className="facerecs-form-input"
+        id="email"
+        name="email"
+        value={credentials.email}
+        onChange={onChange}
+        required
+      />
+      <small id="emailHelp" className="facerecs-form-text">We'll never share your email with anyone else.</small>
+    </div>
+    <div className="facerecs-form-group">
+      <label htmlFor="password" className="facerecs-form-label">Password</label>
+      <input
+        type="password"
+        className="facerecs-form-input"
+        id="password"
+        name="password"
+        value={credentials.password}
+        onChange={onChange}
+        required
+      />
+    </div>
+    <button type="submit" className="facerecs-btn">Login</button>
+  </form>
+  <p className="facerecs-signup-text">
+    Don't have an account? <Link to="/" className="facerecs-signup-link">Signup</Link>
+  </p>
+</div>
+
     </>
   );
 };

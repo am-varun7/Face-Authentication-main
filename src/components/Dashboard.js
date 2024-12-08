@@ -93,7 +93,7 @@ const Dashboard = () => {
     <div className="feature-card">
         <img src={individualImage} alt="Individual Face" />
         <h5>Individual Face Authentication</h5>
-        <p>Securely authenticate individual users with advanced facial recognition technology.</p>
+        <p>Securely authenticate individual users using advanced facial recognition powered by FaceNet and our custom-built model.</p>
         
         <div className="button-group">
             {/* Render model selection buttons if no model is selected */}
@@ -103,7 +103,7 @@ const Dashboard = () => {
                 className="btn btn-primary m-2"
                 onClick={() => handleModelSelection("pretrained")}
                 >
-                Use Pretrained Model
+                Pretrained Model
                 </button>
                 <button
                 className="btn btn-primary m-2"
@@ -113,7 +113,7 @@ const Dashboard = () => {
                     }
                 }
                 >
-                Use Custom CNN Model
+                Custom CNN Model
                 </button>
             </>
             )}
@@ -161,10 +161,15 @@ const Dashboard = () => {
     <div className="feature-card">
         <img src={GroupImage} alt="Group Authentication" />
         <h5>Group Authentication</h5>
-        <p>Authenticate multiple users simultaneously in a single image with precision.</p>
+        <p>Enable precise live group authentication by verifying multiple users simultaneously in a single frame.</p>
         <div className="button-group">
+        <Link to="/individualregistration">
+                    <button className="btn btn-primary m-2">
+                        Register
+                    </button>
+                </Link>
             <Link to="/groupauthentication">
-                <button className="btn btn-secondary">Verify mtcnn</button>
+                <button className="btn btn-primary m-2">Verify </button>
             </Link>
         </div>
     </div>
@@ -172,7 +177,7 @@ const Dashboard = () => {
     <div className="feature-card">
         <img src={CrowdImage} alt="Crowd Analysis" />
         <h5>Crowd Analysis</h5>
-        <p>Analyze and count faces in dense crowds with cutting-edge detection algorithms.</p>
+        <p>Utilize advanced face detection algorithms to analyze and accurately count individuals in dense crowd images and videos.</p>
         <div className="button-group">
             {/* Button for image redirection */}
             <Link to="/crowdimage">
@@ -192,7 +197,7 @@ const Dashboard = () => {
                 <div className="about-section" id="about">
                     <h2>About Our Features</h2>
                     <p>
-                        Discover how our advanced deep learning solutions bring innovation to face recognition,
+                        Discover how our advanced deep learning solutions bring innovation to face recognition(single & group),crowd counting
                         ensuring security, accuracy, and scalability across various applications.
                     </p>
                     <div className="about-cards-container">
@@ -200,24 +205,21 @@ const Dashboard = () => {
                             <div className="about-card-icon">👤</div>
                             <h3>Individual Authentication</h3>
                             <p>
-                                Securely recognize and authenticate individuals using CNN-based deep learning.
-                                Handles variations in lighting, expressions, and angles for reliable access control.
+                            Accurately recognize and authenticate individuals using deep learning with FaceNet and a custom-built model. Designed to handle variations in lighting, expressions, and angles for robust and reliable access control.
                             </p>
                         </div>
                         <div className="about-card">
                             <div className="about-card-icon">👥</div>
                             <h3>Group Authentication</h3>
                             <p>
-                                Use MTCNN and pre-trained models like FaceNet to identify and verify small groups.
-                                Ideal for attendance tracking and secure group access.
+                            Utilizing MTCNN and FaceNet for live authentication, accurately identifying and verifying small groups in real-time, perfect for attendance tracking and secure group access.
                             </p>
                         </div>
                         <div className="about-card">
                             <div className="about-card-icon">📊</div>
                             <h3>Crowd Counting</h3>
                             <p>
-                                Leverage YOLO and MCNN models for real-time face detection in high-density crowds.
-                                Supports safety monitoring and statistical crowd analysis.
+                            Use YOLO to process images or videos for accurate crowd detection and counting, providing valuable insights for safety monitoring and analysis.
                             </p>
                         </div>
                     </div>

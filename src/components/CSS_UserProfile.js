@@ -7,7 +7,7 @@ const styles = {
         backgroundColor: '#fff',
         boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
         borderRadius: '10px',
-        marginTop: '30px',
+        marginTop: '90px',
     },
     profileTitle: {
         fontSize: '24px',
@@ -15,14 +15,14 @@ const styles = {
         color: '#2c3e50',
         textAlign: 'center',
         marginBottom: '20px',
-        borderBottom: '4px solid #3498db', // Adds a blue border at the bottom
+        borderBottom: '4px solid #3498db',
         textTransform: 'uppercase',
         letterSpacing: '2px',
     },
     profileHeader: {
         display: 'flex',
         alignItems: 'center',
-        justifyContent: 'space-between', // gap profile details & addlabel button
+        justifyContent: 'space-between',
         marginBottom: '20px',
     },
     profilePhoto: {
@@ -44,14 +44,14 @@ const styles = {
         fontWeight: 'bold',
     },
     profileDetails: {
-        flex: 1, // Expands to take available space
+        flex: 1,
         marginLeft: '20px',
-        position: 'relative', // For positioning hover elements
+        position: 'relative',
     },
     nameContainer: {
         display: 'flex',
         alignItems: 'center',
-        gap: '8px', // Space between name and edit button
+        gap: '8px',
     },
     name: {
         fontSize: '22px',
@@ -68,7 +68,7 @@ const styles = {
         alignItems: 'center',
         justifyContent: 'center',
         transition: 'opacity 0.3s ease',
-        opacity: 1, // Visible when rendered
+        opacity: 1,
     },
     editNameContainer: {
         display: 'flex',
@@ -103,7 +103,7 @@ const styles = {
         borderRadius: '25px',
         cursor: 'pointer',
         transition: 'background-color 0.3s ease',
-        marginLeft: 'auto', // Aligns the button to the right
+        marginLeft: 'auto',
     },
     labelsHeader: {
         fontSize: '18px',
@@ -112,7 +112,7 @@ const styles = {
         marginBottom: '10px',
         display: 'flex',
         alignItems: 'center',
-        justifyContent: 'space-between', // Aligns the arrow
+        justifyContent: 'space-between',
     },
     arrowButton: {
         background: 'none',
@@ -138,7 +138,7 @@ const styles = {
     labelItemRow: {
         display: 'flex',
         justifyContent: 'space-between',
-        flexWrap: 'wrap', // Wraps the label items if there are too many
+        flexWrap: 'wrap',
     },
     labelText: {
         fontSize: '16px',
@@ -166,46 +166,46 @@ const styles = {
         color: '#555',
     },
     logoutButtonContainer: {
-        position: 'absolute', // Ensures it stays in the top-right
+        position: 'absolute',
         top: '20px',
-        right: '20px', // Align to the right
+        right: '20px',
     },
     logoutButton: {
-        width: '6rem', // Same width as the back button
-        backgroundColor: '#ff6200', // Orange background
-        color: 'white', // White text
-        border: 'none', // No border
-        borderRadius: '30px', // Rounded corners
-        fontSize: '16px', // Font size
-        padding: '8px 16px', // Padding for better clickability
-        cursor: 'pointer', // Pointer cursor for interaction
-        transition: 'background-color 0.3s ease, transform 0.2s ease', // Smooth transitions
-        boxShadow: '0px 4px 6px rgba(0, 0, 0, 0.2)', 
-        transform: 'translateY(3px)'
+        width: '6rem',
+        backgroundColor: '#ff6200',
+        color: 'white',
+        border: 'none',
+        borderRadius: '30px',
+        fontSize: '16px',
+        padding: '8px 16px',
+        cursor: 'pointer',
+        transition: 'background-color 0.3s ease, transform 0.2s ease',
+        boxShadow: '0px 4px 6px rgba(0, 0, 0, 0.2)',
+        transform: 'translateY(3px)',
     },
     logoutButtonHover: {
-        backgroundColor: '#e05a00', // Slightly darker shade for hover
-        transform: 'translateY(-3px)', // Lift effect on hover
+        backgroundColor: '#e05a00',
+        transform: 'translateY(-3px)',
     },
     backButton: {
-        position: 'absolute', // Fixed to a specific position
+        position: 'absolute',
         top: '20px',
-        left: '20px', // Align to the left
-        width: '6rem', // Fixed width
-        backgroundColor: '#ff6200', // Orange background
-        color: 'white', // White text
-        border: 'none', // No border
-        borderRadius: '30px', // Rounded corners
-        fontSize: '16px', // Font size
-        padding: '8px 16px', // Padding for better clickability
-        cursor: 'pointer', // Pointer cursor for interaction
-        transition: 'background-color 0.3s ease, transform 0.2s ease', // Smooth transitions
+        left: '20px',
+        width: '6rem',
+        backgroundColor: '#ff6200',
+        color: 'white',
+        border: 'none',
+        borderRadius: '30px',
+        fontSize: '16px',
+        padding: '8px 16px',
+        cursor: 'pointer',
+        transition: 'background-color 0.3s ease, transform 0.2s ease',
         boxShadow: '0px 4px 6px rgba(0, 0, 0, 0.2)',
         transform: 'translateY(3px)',
     },
     backButtonHover: {
-        backgroundColor: '#e05a00', // Slightly darker shade on hover
-        transform: 'translateY(-3px)', // Lift effect on hover
+        backgroundColor: '#e05a00',
+        transform: 'translateY(-3px)',
     },
     authLogsContainer: {
         padding: '20px',
@@ -251,9 +251,9 @@ const styles = {
         textAlign: 'center',
         marginTop: '16px',
     },
-    viewHistoryButton : {
+    viewHistoryButton: {
         padding: '10px 20px',
-        backgroundColor: '#4CAF50', // Green background
+        backgroundColor: '#4CAF50',
         color: 'white',
         border: 'none',
         borderRadius: '5px',
@@ -261,8 +261,89 @@ const styles = {
         marginTop: '20px',
         textAlign: 'center',
     },
-    
-    
+
+    // Responsive styles for smaller screens
+    '@media (max-width: 768px)': {
+        container: {
+            padding: '15px',
+        },
+        profileTitle: {
+            fontSize: '20px',
+        },
+        profileHeader: {
+            flexDirection: 'column',
+            alignItems: 'center',
+        },
+        profilePhoto: {
+            width: '80px',
+            height: '80px',
+        },
+        name: {
+            fontSize: '18px',
+        },
+        email: {
+            fontSize: '14px',
+        },
+        saveButton: {
+            fontSize: '12px',
+        },
+        addLabelButton: {
+            fontSize: '14px',
+            padding: '8px 16px',
+        },
+        labelsHeader: {
+            fontSize: '16px',
+        },
+        labelItem: {
+            padding: '8px',
+            fontSize: '14px',
+        },
+        backButton: {
+            width: '5rem',
+            padding: '6px 12px',
+        },
+        logoutButton: {
+            width: '5rem',
+            padding: '6px 12px',
+        },
+    },
+    '@media (max-width: 480px)': {
+        profileTitle: {
+            fontSize: '18px',
+        },
+        profilePhoto: {
+            width: '60px',
+            height: '60px',
+        },
+        name: {
+            fontSize: '16px',
+        },
+        email: {
+            fontSize: '12px',
+        },
+        saveButton: {
+            fontSize: '10px',
+        },
+        labelsHeader: {
+            fontSize: '14px',
+        },
+        labelItem: {
+            padding: '6px',
+            fontSize: '12px',
+        },
+        addLabelButton: {
+            fontSize: '12px',
+            padding: '6px 12px',
+        },
+        backButton: {
+            width: '4.5rem',
+            padding: '4px 10px',
+        },
+        logoutButton: {
+            width: '4.5rem',
+            padding: '4px 10px',
+        },
+    },
 };
 
 

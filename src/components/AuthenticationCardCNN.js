@@ -74,7 +74,7 @@ const AuthenticationCardCNN = () => {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
-                    "auth-token": localStorage.getItem("token"),
+                    "auth-token": sessionStorage.getItem("token"),
                 },
                 body: JSON.stringify({ embedding: data.embedding }),
             });

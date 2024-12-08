@@ -13,51 +13,42 @@ const VerificationData = require('../models/VerificationData');
 router.post('/register-face', fetchuser, async (req, res) => {
     try {
         console.log(req.body);
-        // const { name, embedding } = req.body;
-        const name = req.body.name;
-        const roll_no=req.body.roll_no;
-        const branch=req.body.branch;
-        const year=req.body.year;
-        const section=req.body.section;
-        const embeddings = req.body.embeddings;
+        const { name, roll_no, branch, year, section, embeddings } = req.body;
 
-        
+        // Ensure that name and embeddings are provided
         if (!name || !embeddings) {
             return res.status(400).json({ error: "Name and embedding are required" });
         }
 
-                // Ensure embeddings is a 2D array
-                if (!Array.isArray(embeddings) || !embeddings.every(Array.isArray)) {
-                    return res.status(400).json({ error: "Embeddings must be a 2D array" });
-                }
+        // Ensure embeddings is a 2D array
+        if (!Array.isArray(embeddings) || !embeddings.every(Array.isArray)) {
+            return res.status(400).json({ error: "Embeddings must be a 2D array" });
+        }
 
-            // Flatten the 2D array of embeddings into a single array of embeddings
-            // const flattenedEmbeddings = embedding.map(embedding => embedding[0]);
+        // Check if the roll_no already exists in the database
+        const existingUser = await FaceEmbedding.findOne({ roll_no });
+        if (existingUser) {
+            return res.status(400).json({ error: "A user with this roll number is already registered" });
+        }
 
-                // Calculate the average of the embeddings
-                const numEmbeddings = embeddings.length;
-                console.log("Number of embeddings received: ",numEmbeddings)
-                const numDimensions = embeddings[0].length; // Assuming all embeddings have the same length
-                console.log("Number of Dimensions: ",numDimensions)
+        // Calculate the average embedding
+        const numEmbeddings = embeddings.length;
+        console.log("Number of embeddings received: ", numEmbeddings);
+        const numDimensions = embeddings[0].length; // Assuming all embeddings have the same length
+        console.log("Number of Dimensions: ", numDimensions);
 
-                // Initialize an array to hold the sum of each dimension
-                const sumEmbeddings = new Array(numDimensions).fill(0);
-                for (const embedding of embeddings) {
-                    for (let i = 0; i < numDimensions; i++) {
-                        sumEmbeddings[i] += embedding[i]; // Accessing the first element of each embedding
-                    }
-                }
+        // Initialize an array to hold the sum of each dimension
+        const sumEmbeddings = new Array(numDimensions).fill(0);
+        for (const embedding of embeddings) {
+            for (let i = 0; i < numDimensions; i++) {
+                sumEmbeddings[i] += embedding[i];
+            }
+        }
 
-                // Calculate averaged embedding
-                
-                const averagedEmbedding = sumEmbeddings.map(value => value / numEmbeddings);
-                
-                
-                // const averagedEmbedding = flattenedEmbeddings.reduce((avg, emb) => {
-                //     return avg.map((value, index) => value + emb[index]);
-                // }, new Array(flattenedEmbeddings[0].length).fill(0)).map(value => value / flattenedEmbeddings.length);
-            
+        // Calculate the averaged embedding
+        const averagedEmbedding = sumEmbeddings.map(value => value / numEmbeddings);
 
+        // Create a new FaceEmbedding document with the averaged embedding
         const newFace = new FaceEmbedding({
             user: req.user.id, // Link embedding to logged-in user
             name,
@@ -67,8 +58,10 @@ router.post('/register-face', fetchuser, async (req, res) => {
             section,
             embedding: averagedEmbedding, // Store the averaged embedding
         });
-        console.log(averagedEmbedding)
 
+        console.log(averagedEmbedding);
+
+        // Save the new face embedding to the database
         await newFace.save();
         res.status(200).json({ message: "Face registered successfully!" });
     } catch (error) {
@@ -76,54 +69,46 @@ router.post('/register-face', fetchuser, async (req, res) => {
         res.status(500).send("Internal Server Error");
     }
 });
+
 router.post('/register-face-cnn', fetchuser, async (req, res) => {
     try {
         console.log(req.body);
-        // const { name, embedding } = req.body;
-        const name = req.body.name;
-        const roll_no=req.body.roll_no;
-        const branch=req.body.branch;
-        const year=req.body.year;
-        const section=req.body.section;
-        const embeddings = req.body.embeddings
+        const { name, roll_no, branch, year, section, embeddings } = req.body;
 
-        
+        // Ensure that name and embeddings are provided
         if (!name || !embeddings) {
             return res.status(400).json({ error: "Name and embedding are required" });
         }
 
-                // Ensure embeddings is a 2D array
-                if (!Array.isArray(embeddings) || !embeddings.every(Array.isArray)) {
-                    return res.status(400).json({ error: "Embeddings must be a 2D array" });
-                }
+        // Ensure embeddings is a 2D array
+        if (!Array.isArray(embeddings) || !embeddings.every(Array.isArray)) {
+            return res.status(400).json({ error: "Embeddings must be a 2D array" });
+        }
 
-            // Flatten the 2D array of embeddings into a single array of embeddings
-            // const flattenedEmbeddings = embedding.map(embedding => embedding[0]);
+        // Check if the roll_no already exists in the FaceEmbeddingCNN collection
+        const existingUser = await FaceEmbeddingCNN.findOne({ roll_no });
+        if (existingUser) {
+            return res.status(400).json({ error: "A user with this roll number is already registered" });
+        }
 
-                // Calculate the average of the embeddings
-                const numEmbeddings = embeddings.length;
-                console.log("Number of embeddings received: ",numEmbeddings)
-                const numDimensions = embeddings[0].length; // Assuming all embeddings have the same length
-                console.log("Number of Dimensions: ",numDimensions)
+        // Calculate the average of the embeddings
+        const numEmbeddings = embeddings.length;
+        console.log("Number of embeddings received: ", numEmbeddings);
+        const numDimensions = embeddings[0].length; // Assuming all embeddings have the same length
+        console.log("Number of Dimensions: ", numDimensions);
 
-                // Initialize an array to hold the sum of each dimension
-                const sumEmbeddings = new Array(numDimensions).fill(0);
-                for (const embedding of embeddings) {
-                    for (let i = 0; i < numDimensions; i++) {
-                        sumEmbeddings[i] += embedding[i]; // Accessing the first element of each embedding
-                    }
-                }
+        // Initialize an array to hold the sum of each dimension
+        const sumEmbeddings = new Array(numDimensions).fill(0);
+        for (const embedding of embeddings) {
+            for (let i = 0; i < numDimensions; i++) {
+                sumEmbeddings[i] += embedding[i];
+            }
+        }
 
-                // Calculate averaged embedding
-                
-                const averagedEmbedding = sumEmbeddings.map(value => value / numEmbeddings);
-                
-                
-                // const averagedEmbedding = flattenedEmbeddings.reduce((avg, emb) => {
-                //     return avg.map((value, index) => value + emb[index]);
-                // }, new Array(flattenedEmbeddings[0].length).fill(0)).map(value => value / flattenedEmbeddings.length);
-            
+        // Calculate the averaged embedding
+        const averagedEmbedding = sumEmbeddings.map(value => value / numEmbeddings);
 
+        // Create a new FaceEmbeddingCNN document with the averaged embedding
         const newFace = new FaceEmbeddingCNN({
             user: req.user.id, // Link embedding to logged-in user
             name,
@@ -133,8 +118,10 @@ router.post('/register-face-cnn', fetchuser, async (req, res) => {
             section,
             embedding: averagedEmbedding, // Store the averaged embedding
         });
-        console.log(averagedEmbedding)
 
+        console.log(averagedEmbedding);
+
+        // Save the new face embedding to the database
         await newFace.save();
         res.status(200).json({ message: "Face registered successfully!" });
     } catch (error) {

@@ -38,7 +38,7 @@ const Signup = (props) => {
 
     if (json.success) {
       // Save the auth token and redirect
-      localStorage.setItem('token', json.authToken);
+      sessionStorage.setItem('token', json.authToken);
       navigate('/login');
       props.showAlert("Account Created Successfully", "success");
     } else {
@@ -51,7 +51,7 @@ const Signup = (props) => {
   };
 
   return (<>
-    <div className="signup-video-background">
+   <div className="signup-video-background">
   <video autoPlay muted loop id="signup-background-video">
     <source src={Backgroundvideo} type="video/mp4" />
     Your browser does not support the video tag.

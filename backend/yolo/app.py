@@ -16,13 +16,13 @@ app = Flask(__name__)
 CORS(app)
 log_queue = Queue()
 # Constants
-MODEL_PATH = r"C:\Users\VARUN\OneDrive\Desktop\backend\YOLO-CROWD\yolo-crowd.pt"
-UPLOAD_FOLDER = r"C:\Users\VARUN\OneDrive\Desktop\Face-Authentication-main\backend\YOLO-CROWD\uploads"
+MODEL_PATH = r"C:\Users\VARUN\OneDrive\Desktop\Face-Authentication-main\backend\yolo\yolo-crowd.pt"
+UPLOAD_FOLDER = r"C:\Users\VARUN\OneDrive\Desktop\Face-Authentication-main\backend\uploads"
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg','mp4', 'avi', 'mov', 'mkv'}
 OUTPUT_VIDEO_PATH = os.path.join(UPLOAD_FOLDER, "output_video.mp4")
 OUTPUT_IMAGE_PATH = os.path.join(UPLOAD_FOLDER, "output.jpg")
 IMG_SIZE = 640
-OUTPUT_FOLDER = r"C:\Users\VARUN\OneDrive\Desktop\Face-Authentication-main\backend\YOLO-CROWD\output_videos"
+OUTPUT_FOLDER = r"C:\Users\VARUN\OneDrive\Desktop\Face-Authentication-main\backend\output_videos"
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['OUTPUT_FOLDER'] = OUTPUT_FOLDER
 
@@ -157,11 +157,15 @@ def video_detect():
         if video_writer:
             video_writer.release()
 
+        # Calculate average detections per frame as an integer
+        average_detections = int(total_detections / total_frames) if total_frames > 0 else 0
+
         return jsonify({
             "message": f"Video '{filename}' processed successfully!",
             "output_video": f"processed_{filename}",
             "total_detections": total_detections,
-            "total_frames": total_frames
+            "total_frames": total_frames,
+            "average_detections": average_detections
         }), 200
 
     return jsonify({"error": "File upload failed"}), 500
@@ -225,14 +229,16 @@ def get_output_video(filename):
         # Stream the video file (not as an attachment, so it plays in the browser)
         return send_file(
             video_path,
-            as_attachment=False,  # Ensures it opens in the browser
+            as_attachment=True,  # Ensures it opens in the browser
             mimetype='video/mp4',  # Specify correct MIME type
-            cache_timeout=0  # Disable caching for fresh video content every time
+            download_name=filename  # Disable caching for fresh video content every time
         )
     except Exception as e:
         # Catch errors and log
         print(f"Error streaming video: {e}")
         return jsonify({"error": "Unable to stream video"}), 500
+
+
 
 
 if __name__ == '__main__':

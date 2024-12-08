@@ -186,7 +186,7 @@ const UserProfile = () => {
                         </div>
                         <button
                             style={styles.addLabelButton}
-                            onClick={() => navigate('/model-selection')}
+                            onClick={() => navigate('/individualregistration')}
                         >
                             Add Label
                         </button>
