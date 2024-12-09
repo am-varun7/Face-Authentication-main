@@ -226,7 +226,7 @@ const Dashboard = () => {
                 </div>
 
                 <footer>
-                    <p>Copyright © 2024 Design.com. All Rights Reserved.</p>
+                    <p>Copyright © 2024 Facerecs.com. All Rights Reserved.</p>
                 </footer>
             </div>
             

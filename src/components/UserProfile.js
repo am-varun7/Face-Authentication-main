@@ -184,12 +184,6 @@ const UserProfile = () => {
                             )}
                             <p style={styles.email}>Email: {userData.email}</p>
                         </div>
-                        <button
-                            style={styles.addLabelButton}
-                            onClick={() => navigate('/individualregistration')}
-                        >
-                            Add Label
-                        </button>
                     </div>
                     {/* For CNN model Face Labels */}
                     <h4 style={styles.labelsHeader}>
