@@ -86,10 +86,9 @@ const AuthenticationCardCNN = () => {
                 setMessage(`Identified: ${result.name}`);
                 setPersonsIdentified((prev) => {
                     const isPersonExist = prev.some(
-                        (person) => person.name === result.name && person.roll_no === result.roll_no && person.branch === result.branch && person.year === result.year && person.section === result.section
-                      );
+                        (person) => person.name === result.name && person.roll_no === result.roll_no );
                       if (!isPersonExist) {
-                        return [...prev, { name: result.name, roll_no: result.roll_no,branch:result.branch,year:result.year,section:result.section ,image: dataUrl }];
+                        return [...prev, { name: result.name, roll_no: result.roll_no, image: dataUrl }];
                       }
                     return prev;
                 });
@@ -218,9 +217,6 @@ const AuthenticationCardCNN = () => {
                                     <div className="person-details">
                                         <p><strong>Name:</strong> {person.name}</p>
                                         <p><strong>Roll No:</strong> {person.roll_no}</p>
-                                        <p><strong>Branch:</strong> {person.branch}</p>
-                                        <p><strong>Year:</strong> {person.year}</p>
-                                        <p><strong>Section:</strong> {person.section}</p>
                                     </div>
                                     </div>
                                 </li>

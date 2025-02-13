@@ -16,18 +16,6 @@ const faceSchema = new mongoose.Schema({
         type : String,
         required :true
     },
-    branch: {
-        type : String,
-        required :true
-    },
-    year: {
-        type : String,
-        required :true
-    },
-    section: {
-        type : String,
-        required :true
-    },
     embedding :{
         type : Array, //Store as an array of numbers
         required : true

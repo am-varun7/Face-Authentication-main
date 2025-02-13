@@ -88,15 +88,15 @@ router.post('/login', [
     }
 
 
-    const {email,password} = req.body; //extracting email and password from req body
+    const { email, password } = req.body; //extracting email and password from req body
     try{
-        let user =await  User.findOne({email})   //finding the user with same input email
+        let user =await  User.findOne({ email })   //finding the user with same input email
         if(!user){
             success = false
-            return res.status(400).json({success, error : "Please Login with Correct Credentials"})
+            return res.status(400).json({ success, error : "Please Login with Valid Credentials" })
         }
         
-        const passwordCompare = await  bcrypt.compare(password,user.password)
+        const passwordCompare = await bcrypt.compare(password,user.password)
 
         if(!passwordCompare){
             success = false
@@ -132,10 +132,10 @@ router.post('/getuser', fetchuser , async (req,res)=>{
         console.error(error.message);
         res.status(500).send("Internal Server Error")
     }
+});
 
 
-
-})
+// ROUTE 4: User Profile detail using GET "api/auth/profile". Login required
 router.get('/profile', fetchuser, async (req, res) => {
     try {
         const user = await User.findById(req.user.id).select('-password'); // Avoid returning sensitive info
@@ -149,6 +149,9 @@ router.get('/profile', fetchuser, async (req, res) => {
         res.status(500).json({ error: 'Error fetching profile data' });
     }
 });
+
+
+// ROUTE 5: Update User's NAme using GET "api/auth/profile".  Login required
 router.put('/profile/update-name', fetchuser, async (req, res) => {
     try {
         const userId = req.user.id; // `auth` middleware should add `user` to req
@@ -181,13 +184,5 @@ router.put('/profile/update-name', fetchuser, async (req, res) => {
 
 
 module.exports = router;
-
-
-
-
-
-
-
-
 
 

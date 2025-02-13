@@ -16,13 +16,13 @@ app = Flask(__name__)
 CORS(app)
 log_queue = Queue()
 # Constants
-MODEL_PATH = r"C:\Users\VARUN\OneDrive\Desktop\Face-Authentication-main\backend\yolo\yolo-crowd.pt"
-UPLOAD_FOLDER = r"C:\Users\VARUN\OneDrive\Desktop\Face-Authentication-main\backend\uploads"
+MODEL_PATH = r"C:\Users\pra21\Desktop\Face-Authentication-main\backend\yolo\yolo-crowd.pt"
+UPLOAD_FOLDER = r"C:\Users\pra21\Desktop\Face-Authentication-main\backend\uploads"
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg','mp4', 'avi', 'mov', 'mkv'}
 OUTPUT_VIDEO_PATH = os.path.join(UPLOAD_FOLDER, "output_video.mp4")
 OUTPUT_IMAGE_PATH = os.path.join(UPLOAD_FOLDER, "output.jpg")
 IMG_SIZE = 640
-OUTPUT_FOLDER = r"C:\Users\VARUN\OneDrive\Desktop\Face-Authentication-main\backend\output_videos"
+OUTPUT_FOLDER = r"C:\Users\pra21\Desktop\Face-Authentication-main\output_videos"
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['OUTPUT_FOLDER'] = OUTPUT_FOLDER
 
@@ -88,7 +88,7 @@ def get_output_image():
 
 
 
-OUTPUT_VIDEOS_DIR=r":C:\Users\VARUN\OneDrive\Desktop\Face-Authentication-main\backend\YOLO-CROWD\output_videos"
+OUTPUT_VIDEOS_DIR=r"C:\Users\pra21\Desktop\Face-Authentication-main\output_videos"
 
 
 

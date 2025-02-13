@@ -10,7 +10,7 @@ import AuthenticationCard from './components/AuthenticationCard';
 import AuthenticationCardCNN from './components/AuthenticationCardCNN';
 import IndividualRegCNN from './components/IndividualRegCNN';
 import UserProfile from './components/UserProfile';
-import GroupAuthentication from './components/GroupAuthentication';
+import GroupAuthentication from './components/Groupauthentication';
 import History from './components/History';
 import CrowdUpload from './components/CrowdUpload';
 import Crowdimage from './components/crowdimage';

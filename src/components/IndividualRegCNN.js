@@ -1,35 +1,33 @@
-
 import React, { useRef, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { QrReader } from "react-qr-reader";
+import './IndividualReg.css';
+
 const IndividualRegCNN = () => {
     const videoRef = useRef(null);
+    const navigate = useNavigate();
     const [isRegistering, setIsRegistering] = useState(false);
     const [capturedFrames, setCapturedFrames] = useState([]);
     const [frameCount, setFrameCount] = useState(0);
     const [status, setStatus] = useState("");
     const [name, setName] = useState("");
     const [roll_no, setroll_no] = useState("");
-    const [branch, setbranch] = useState("");
-    const [year, setyear] = useState("");
-    const [section, setsection] = useState("");
-    const navigate = useNavigate();
+    const [showQRScanner, setShowQRScanner] = useState(false);
 
-    // Start the video stream
     const startVideo = async () => {
-        if (videoRef.current && videoRef.current.srcObject) {
-            return;
-        }
+        if (videoRef.current && videoRef.current.srcObject) return;
+
         try {
             const stream = await navigator.mediaDevices.getUserMedia({ video: true });
             videoRef.current.srcObject = stream;
             await videoRef.current.play();
+            setStatus(""); // Clear status when camera starts
         } catch (error) {
             console.error("Error accessing webcam:", error);
             setStatus("Unable to access the camera. Please allow permissions.");
         }
     };
 
-    // Stop the video stream
     const stopVideo = () => {
         if (videoRef.current && videoRef.current.srcObject) {
             const stream = videoRef.current.srcObject;
@@ -38,7 +36,6 @@ const IndividualRegCNN = () => {
         }
     };
 
-    // Capture a single frame from the video
     const captureFrame = async () => {
         const canvas = document.createElement("canvas");
         canvas.width = videoRef.current.videoWidth;
@@ -46,14 +43,12 @@ const IndividualRegCNN = () => {
         const context = canvas.getContext("2d");
         context.drawImage(videoRef.current, 0, 0, canvas.width, canvas.height);
 
-        const dataUrl = canvas.toDataURL("image/jpeg");
-        return dataUrl; // Base64 representation of the captured frame
+        return canvas.toDataURL("image/jpeg");
     };
 
-    // Handle registration process
     const handleRegister = async () => {
-        if (!name) {
-            alert("Please enter a name");
+        if (!name || !roll_no) {
+            alert("Please fill in all required fields.");
             return;
         }
 
@@ -66,11 +61,11 @@ const IndividualRegCNN = () => {
         let frameCounter = 0;
 
         const captureInterval = setInterval(async () => {
+            // setStatus("");
             if (frameCounter < 10) {
                 const frame = await captureFrame();
                 if (frame) {
                     try {
-                        // Send frame to Flask API using your custom CNN
                         const response = await fetch("http://localhost:5001/generate-embedding-cnn", {
                             method: "POST",
                             headers: { "Content-Type": "application/json" },
@@ -79,10 +74,8 @@ const IndividualRegCNN = () => {
 
                         const data = await response.json();
 
-                        
-
                         if (data.faceDetected) {
-                            embeddings.push(data.embedding); // Store embedding
+                            embeddings.push(data.embedding);
                             setFrameCount((prev) => prev + 1);
                             setStatus(`Face detected and captured (${frameCounter + 1}/10).`);
                             frameCounter++;
@@ -99,36 +92,34 @@ const IndividualRegCNN = () => {
                 stopVideo();
                 sendEmbeddingsToBackend(embeddings);
             }
-        }, 1000); // Capture every second
+        }, 1000);
     };
 
-    // Send captured embeddings to the Node.js backend
     const sendEmbeddingsToBackend = async (embeddings) => {
         if (embeddings.length === 0) {
-            setStatus("No valid embeddings captured.");
+            setStatus("Failed to capture valid face data.");
+            setIsRegistering(false);
             return;
         }
 
-        const requestBody = { name,roll_no,branch,year,section, embeddings };
+        const requestBody = { name, roll_no, embeddings };
 
         try {
             const response = await fetch("http://localhost:5000/api/face/register-face-cnn", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
-                    "auth-token": sessionStorage.getItem("token"), // Include user token for authentication
+                    "auth-token": sessionStorage.getItem("token"),
                 },
                 body: JSON.stringify(requestBody),
             });
-            
-            console.log(requestBody);
 
             if (response.ok) {
-                setStatus("Registration complete.");
+                setStatus("Registration successful!");
             } else {
                 const errorData = await response.json();
-                console.log("Backend response:", errorData);
-                setStatus(`Error registering face: ${errorData.error}`);
+                console.error("Backend error:", errorData);
+                setStatus(`Error registering face: ${errorData.message || "Unknown error."}`);
             }
         } catch (error) {
             console.error("Error sending embeddings:", error);
@@ -138,15 +129,40 @@ const IndividualRegCNN = () => {
         }
     };
 
-    // Stop the video when the component is unmounted
     useEffect(() => {
         return () => {
             stopVideo();
         };
     }, []);
+
     const handleBack = () => {
-        navigate("/Dashboard"); // Navigate back to the dashboard
+        navigate("/Dashboard");
     };
+
+    const handleQRResult = (result, error) => {
+        if (result?.text) {
+            const [scannedRollNo, scannedName] = result.text.split(",");
+            setroll_no(scannedRollNo || "");
+            setName(scannedName || "");
+            setShowQRScanner(false);
+            stopVideo(); 
+            // setStatus("QR Code scanned successfully!");
+        }
+        if (error) {
+            // console.error("QR Code Scan Error:", error);
+            console.log('QR Scanning Error!');
+            // setStatus("Error reading QR code. Please try again.");
+        }
+    };
+
+    const handleShowQRScanner = () => {
+        if (showQRScanner) {
+            stopVideo(); // Stop video if QR scanner is being closed
+        }
+        setShowQRScanner(!showQRScanner);
+        setStatus(""); // Clear status when toggling QR scanner
+    };
+
 
     return (
         <div className="register-container">
@@ -156,6 +172,19 @@ const IndividualRegCNN = () => {
             <h1 className="register-heading">Register Face</h1>
             <div className="register-card">
                 <div className="register-card-body">
+                    <button
+                        onClick={handleShowQRScanner}
+                        disabled={videoRef.current?.srcObject && !showQRScanner}
+                        className="register-btn register-btn-secondary scan-qr-btn"
+                    >
+                        {showQRScanner ? "Close QR Scanner" : "Scan QR Code"}
+                    </button>
+                    {showQRScanner && (
+                        <QrReader
+                            onResult={handleQRResult}
+                            style={{ width: "100%" }}
+                        />
+                    )}
                     <input
                         type="text"
                         placeholder="Enter name"
@@ -163,40 +192,13 @@ const IndividualRegCNN = () => {
                         onChange={(e) => setName(e.target.value)}
                         disabled={isRegistering}
                         className="register-input mb-3"
+                        required
                     />
                     <input
                         type="text"
                         placeholder="Enter Roll_no"
                         value={roll_no}
                         onChange={(e) => setroll_no(e.target.value)}
-                        disabled={isRegistering}
-                        className="register-input mb-3"
-                        required
-                    />
-                    <input
-                        type="text"
-                        placeholder="Enter Branch"
-                        value={branch}
-                        onChange={(e) => setbranch(e.target.value)}
-                        disabled={isRegistering}
-                        className="register-input mb-3"
-                        required
-                    />
-                    <input
-                        type="text"
-                        placeholder="Enter year"
-                        value={year}
-                        onChange={(e) => setyear(e.target.value)}
-                        disabled={isRegistering}
-                        className="register-input mb-3"
-                        required
-                    />
-                    
-                    <input
-                        type="text"
-                        placeholder="Enter section"
-                        value={section}
-                        onChange={(e) => setsection(e.target.value)}
                         disabled={isRegistering}
                         className="register-input mb-3"
                         required
@@ -214,7 +216,7 @@ const IndividualRegCNN = () => {
                     <button onClick={handleRegister} disabled={isRegistering} className="register-btn register-btn-primary mt-3">
                         Register
                     </button>
-                    <p className="register-status mt-3">Status: {status}</p>
+                    <p className="register-status mt-3">Status: {status || "None"}</p>
                     <p className="register-frame-count">Captured Frames: {frameCount}/10</p>
                 </div>
             </div>
@@ -222,4 +224,4 @@ const IndividualRegCNN = () => {
     );
 };
 
-export default IndividualRegCNN
+export default IndividualRegCNN;

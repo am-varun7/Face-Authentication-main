@@ -50,6 +50,28 @@
     padding: 20px;
 }
 
+.scan-qr-btn {
+    background-color: teal; /* Blue background */
+    color: white; /* White text */
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 14px;
+    border: none;
+    cursor: pointer;
+    width: 50%; /* 60% width */
+    margin: 0 auto; /* Center horizontally */
+    display: block; /* Ensure it behaves like a block-level element */
+    text-align: center; /* Center text inside the button */
+    margin-bottom: 20px;
+    margin-top: -10px;
+}
+
+.scan-qr-btn:disabled {
+    background-color: #ccc; /* Light gray when disabled */
+    cursor: not-allowed;
+}
+
+
 /* Input Group Styling */
 .register-input-group {
     margin-bottom: 15px;
@@ -135,6 +157,8 @@
     text-align: center;
     margin-top: 10px;
 }
+
+
 
 
 /* Responsive Design */

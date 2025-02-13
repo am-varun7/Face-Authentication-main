@@ -137,7 +137,7 @@ const CrowdUpload = () => {
         {response?.average_detections !== undefined && (
     <div className="average-detections-container">
         <p>
-        Frame-wise Average Person Count: <strong className="average-detections-value">{response.average_detections}</strong>
+            Average Persons Per Frame: <strong className="average-detections-value">{response.average_detections}</strong>
         </p>
     </div>
 )}

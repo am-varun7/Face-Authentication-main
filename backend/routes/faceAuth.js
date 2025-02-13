@@ -8,12 +8,10 @@ const VerificationData = require('../models/VerificationData');
 
 
 // Register Face - Calls Python service to generate embedding, then saves it in MongoDB
-
-
 router.post('/register-face', fetchuser, async (req, res) => {
     try {
         console.log(req.body);
-        const { name, roll_no, branch, year, section, embeddings } = req.body;
+        const { name, roll_no, embeddings } = req.body;
 
         // Ensure that name and embeddings are provided
         if (!name || !embeddings) {
@@ -53,9 +51,6 @@ router.post('/register-face', fetchuser, async (req, res) => {
             user: req.user.id, // Link embedding to logged-in user
             name,
             roll_no,
-            branch,
-            year,
-            section,
             embedding: averagedEmbedding, // Store the averaged embedding
         });
 
@@ -73,7 +68,7 @@ router.post('/register-face', fetchuser, async (req, res) => {
 router.post('/register-face-cnn', fetchuser, async (req, res) => {
     try {
         console.log(req.body);
-        const { name, roll_no, branch, year, section, embeddings } = req.body;
+        const { name, roll_no, embeddings } = req.body;
 
         // Ensure that name and embeddings are provided
         if (!name || !embeddings) {
@@ -113,9 +108,6 @@ router.post('/register-face-cnn', fetchuser, async (req, res) => {
             user: req.user.id, // Link embedding to logged-in user
             name,
             roll_no,
-            branch,
-            year,
-            section,
             embedding: averagedEmbedding, // Store the averaged embedding
         });
 
@@ -182,9 +174,6 @@ router.post('/authenticate', fetchuser, async (req, res) => {
                 message: "Person identified successfully",
                 name: bestMatch.name,
                 roll_no: bestMatch.roll_no,
-                branch: bestMatch.branch,
-                year: bestMatch.year,
-                section: bestMatch.section,
                 details: bestMatch, // Include any other stored details
             });
         } else {
@@ -242,9 +231,6 @@ router.post('/groupauthenticate', fetchuser, async (req, res) => {
                     match: true,
                     name: bestMatch.name,
                     roll_no: bestMatch.roll_no,
-                    branch: bestMatch.branch,
-                    year: bestMatch.year,
-                    section: bestMatch.section,
                 });
             } else {
                 results.push({ match: false, message: "No match found" });
@@ -309,9 +295,6 @@ router.post('/authenticate-cnn', fetchuser, async (req, res) => {
                 message: "Person identified successfully",
                 name: bestMatch.name,
                 roll_no: bestMatch.roll_no,
-                branch: bestMatch.branch,
-                year: bestMatch.year,
-                section: bestMatch.section,
                 details: bestMatch, // Include any other stored details
             });
         } else {

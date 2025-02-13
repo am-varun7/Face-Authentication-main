@@ -5,8 +5,9 @@ from utils.general import non_max_suppression, scale_coords
 import cv2  
 
 # Paths
-MODEL_PATH = r"C:\Users\VARUN\OneDrive\Desktop\Face-Authentication-main\backend\YOLO-CROWD\yolo-crowd.pt"  # Path to the model
-IMAGE_PATH = r"C:\Users\VARUN\OneDrive\Desktop\images.jpeg"  # Path to your image
+MODEL_PATH = r"C:\Users\pra21\Desktop\Face-Authentication-main\backend\yolo\yolo-crowd.pt"  # Path to the model
+# IMAGE_PATH = r"C:\Users\pra21\Desktop\images.jpeg"  # Path to your image
+IMAGE_PATH = r"C:\Users\pra21\Downloads\crowd.webp"
 
 # Load the model
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')

@@ -150,7 +150,7 @@ const GroupAuthentication = () => {
             <button onClick={handleBack} className="back-button">
                 &lt; Back
             </button>
-    <h1 className="auth-heading">Group Authentication</h1>
+    <h1 className="auth-heading">Group Authentication Mtcnn</h1>
     <div className="auth-content">
         <div className="auth-card">
             <div className="auth-card-body">

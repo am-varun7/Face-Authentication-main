@@ -27,7 +27,7 @@ CORS(app, resources={
 embedder = FaceNet()
 
 #loading custom model
-custom_model = load_model('C:/Users/VARUN/OneDrive/Desktop/Face-Authentication-main/backend/face_model_74.h5')
+custom_model = load_model('C:/Users/pra21/Desktop/Face-Authentication-main/backend/face_model_74.h5')
 
 # Initialize MTCNN for face detection
 mtcnn = MTCNN(keep_all=True)
