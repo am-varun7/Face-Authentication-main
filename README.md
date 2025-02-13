@@ -3,6 +3,8 @@
 This project is a **Face Authentication System** designed for secure user authentication, individual face registration, group verification, and crowd analysis. It leverages **deep learning** and **computer vision** techniques within a **MERN stack** architecture for efficient and scalable performance.
 
 ---
+![Screenshot 2025-02-12 15142523](https://github.com/user-attachments/assets/b63fd37a-9f27-4bec-8e20-aca14d9dd887)
+
 
 ## Features
 
