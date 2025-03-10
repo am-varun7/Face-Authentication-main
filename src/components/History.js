@@ -184,6 +184,7 @@ const History = () => {
                     </p>
                 )}
             </div>
+            <p style={{marginTop: "20px", marginBottom: "0px", textAlign: "center",  color: '#999',}}>Only Individual Authencation Records [PTM]</p>
         </div>
     );
 };

@@ -1,7 +1,7 @@
 
 import React, { useRef, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-// import './Authentication.css'; // Import your CSS file
+ import './AuthenticationCard.css'; // Import your CSS file
 
 const GroupAuthentication = () => {
     const [isAuthenticating, setIsAuthenticating] = useState(false);

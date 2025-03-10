@@ -139,12 +139,14 @@ router.post('/getuser', fetchuser , async (req,res)=>{
 router.get('/profile', fetchuser, async (req, res) => {
     try {
         const user = await User.findById(req.user.id).select('-password'); // Avoid returning sensitive info
-        const faceData = await FaceEmbedding.find({ user: req.user.id }).select('name -_id');
-        const labels = faceData.map((data) => data.name);
-        const PTM_faceData = await FaceEmbeddingCNN.find({ user: req.user.id }).select('name -_id');
-        const plabels = PTM_faceData.map((data) => data.name);
+        const PTM_faceData = await FaceEmbedding.find({ user: req.user.id }).select('name -_id');
+        const pLabels = PTM_faceData.map((data) => data.name);
+        const CNN_faceData = await FaceEmbeddingCNN.find({ user: req.user.id }).select('name -_id');
+        const cnnLabels = CNN_faceData.map((data) => data.name);
+        
 
-        res.json({ user, labels, plabels });
+        res.json({ user, pLabels, cnnLabels });
+
     } catch (error) {
         res.status(500).json({ error: 'Error fetching profile data' });
     }

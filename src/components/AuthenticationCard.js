@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect, useCallback } from "react";
-import { useNavigate } from "react-router-dom"; // Import useNavigate for routing
+import { useNavigate } from "react-router-dom";
 import "./AuthenticationCard.css";
 
 const Authentication = () => {
@@ -8,24 +8,32 @@ const Authentication = () => {
   const [message, setMessage] = useState("");
   const [personsIdentified, setPersonsIdentified] = useState([]);
   const [capturing, setCapturing] = useState(false);
-  const [showRecapture, setShowRecapture] = useState(false); // New state for recapture button
-  const [showReverify, setShowReverify] = useState(false); // New state for reverify button
+  const [showRecapture, setShowRecapture] = useState(false);
+  const [showReverify, setShowReverify] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const videoRef = useRef(null);
-  const navigate = useNavigate(); // Hook to navigate
+  const navigate = useNavigate();
 
   // Start webcam video stream
   const startVideo = async () => {
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+      const stream = await navigator.mediaDevices.getUserMedia({ 
+        video: { 
+          width: { ideal: 640 },
+          height: { ideal: 480 },
+          facingMode: "user"
+        } 
+      });
+      
       if (videoRef.current) {
         videoRef.current.srcObject = stream;
         videoRef.current.play();
       }
     } catch (error) {
       console.error("Error accessing webcam:", error);
-      setMessage("Error accessing webcam.");
-      stopVideo(); // Stop the video if an error occurs
+      setMessage(`Error accessing webcam: ${error.message}`);
+      stopVideo();
     }
   };
 
@@ -41,82 +49,122 @@ const Authentication = () => {
   // Start authentication process
   const startAuthentication = () => {
     setCapturing(true);
-    setMessage("Starting authentication...");
+    setMessage("Starting authentication... Please face the camera");
     setIsAuthenticating(true);
-    setShowRecapture(false); // Hide recapture button when authentication starts
-    setShowReverify(false); // Hide reverify button when authentication starts
-    startVideo();
+    setShowRecapture(false);
+    setShowReverify(false);
+    setIsLoading(true);
+    startVideo().then(() => {
+      // Give time for camera to initialize
+      setTimeout(() => {
+        setIsLoading(false);
+      }, 1500);
+    });
   };
 
   // Capture a frame and send it to the Flask server
   const captureFrame = useCallback(async () => {
-    const canvas = document.createElement("canvas");
-    canvas.width = videoRef.current?.videoWidth || 0;
-    canvas.height = videoRef.current?.videoHeight || 0;
-    const context = canvas.getContext("2d");
-    context?.drawImage(videoRef.current, 0, 0, canvas.width, canvas.height);
-    const dataUrl = canvas.toDataURL("image/jpeg");
+    if (!videoRef.current || !videoRef.current.videoWidth) {
+      console.log("Video not ready yet");
+      return;
+    }
 
     try {
-      // Send the frame to Flask for face detection and embedding generation
+      setIsLoading(true);
+      
+      // Create canvas and get image data
+      const canvas = document.createElement("canvas");
+      canvas.width = videoRef.current.videoWidth;
+      canvas.height = videoRef.current.videoHeight;
+      
+      const context = canvas.getContext("2d");
+      context.drawImage(videoRef.current, 0, 0, canvas.width, canvas.height);
+      const dataUrl = canvas.toDataURL("image/jpeg");
+
+      // Step 1: Send frame to Flask for face detection and embedding generation
       const response = await fetch("http://localhost:5001/generate-embedding", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ frame: dataUrl }),
       });
 
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(`Flask server error: ${errorData.message || 'Unknown error'}`);
+      }
+
       const data = await response.json();
 
       if (!data.faceDetected) {
-        // Check if the response message indicates multiple faces detected
         if (data.message === "Multiple faces detected. Please adjust the camera to capture only one face.") {
-          setMessage(data.message); // Set the message to show the user
+          setMessage(data.message);
+        } else {
+          setMessage("No face detected. Please position yourself clearly in front of the camera.");
         }
-        setShowRecapture(true); // Show recapture button if no face detected or multiple faces detected
+        setShowRecapture(true);
+        setIsLoading(false);
         return;
       }
 
-      // If a face is detected, send the embedding to the backend for authentication
+      // Step 2: Send the embedding to the backend for authentication
+      const token = sessionStorage.getItem("token");
+      if (!token) {
+        throw new Error("Authentication token not found. Please log in again.");
+      }
+
       const backendResponse = await fetch(
         "http://localhost:5000/api/face/authenticate",
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            "auth-token": sessionStorage.getItem("token"),
-          },
+            "auth-token": token,
+          }, 
           body: JSON.stringify({ embedding: data.embedding }),
         }
       );
 
+      if (!backendResponse.ok) {
+        const errorData = await backendResponse.json();
+        throw new Error(`Authentication failed: ${errorData.message || 'Server error'}`);
+      }
+
       const result = await backendResponse.json();
 
-      if (backendResponse.ok && result.name) {
+      if (result.name) {
         setIdentifiedPerson(result.name);
-        setMessage(`Name: ${result.name}`);
-        console.log("Result Name:", result.name); // Check if it's the expected value
+        setMessage(`Successfully identified: ${result.name}`);
+        console.log("Result Name:", result.name);
 
-        const storeVerificationResponse = await fetch(
-          "http://localhost:5000/api/face/store-verification",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              "auth-token": sessionStorage.getItem("token"), // Ensure the token is correctly set
-            },
-            body: JSON.stringify({ labelName: result.name }), // Ensure result.name has the expected value
+        // Store verification record
+        try {
+          const storeVerificationResponse = await fetch(
+            "http://localhost:5000/api/face/store-verification",
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                "auth-token": token,
+              },
+              body: JSON.stringify({ labelName: result.name }),
+            }
+          );
+          
+          if (!storeVerificationResponse.ok) {
+            const verificationError = await storeVerificationResponse.json();
+            console.warn("Verification storage note:", verificationError.message);
           }
-        );
-        
-        
+        } catch (verificationError) {
+          console.error("Error storing verification:", verificationError);
+          // Non-critical error, don't disrupt the user flow
+        }
 
         // Add to the identified persons list if not already present
         setPersonsIdentified((prev) => {
           const isPersonExist = prev.some(
-            (person) =>
-              person.name === result.name &&
-              person.roll_no === result.roll_no
+            (person) => person.name === result.name && person.roll_no === result.roll_no
           );
+          
           if (!isPersonExist) {
             return [
               ...prev,
@@ -137,41 +185,54 @@ const Authentication = () => {
         setShowReverify(true);
       } else {
         setMessage("Authentication failed: Unknown user detected");
-        setShowRecapture(true); // Show recapture button if face is detected but not recognized
-        stopVideo(); // Stop the video if the face is not recognized
+        setShowRecapture(true);
+        stopVideo();
         setCapturing(false);
       }
     } catch (error) {
       console.error("Error during authentication:", error);
-      setMessage("Error occurred during authentication.");
-      setShowRecapture(false);
-      stopVideo(); // Stop the video on any error
+      setMessage(`Error: ${error.message}`);
+      setShowRecapture(true);
+      stopVideo();
+      setCapturing(false);
+    } finally {
+      setIsLoading(false);
     }
-  }, []); // Empty array means this function won't change unless dependencies change
+  }, []);
 
   // Continuously capture frames while "capturing" is true
   useEffect(() => {
     let interval;
-    if (capturing) {
-      interval = setInterval(() => {
+    if (capturing && !isLoading) {
+      // First capture after a short delay to ensure camera is ready
+      const initialTimeout = setTimeout(() => {
         captureFrame();
       }, 1000);
+      
+      // Then set up the interval for subsequent captures
+      interval = setInterval(() => {
+        captureFrame();
+      }, 2000); // Increased to 2 seconds to reduce performance issues
+      
+      return () => {
+        clearTimeout(initialTimeout);
+        clearInterval(interval);
+      };
     }
-    return () => clearInterval(interval); // Cleanup on unmount
-  }, [capturing, captureFrame]);
+    return () => clearInterval(interval);
+  }, [capturing, captureFrame, isLoading]);
 
-  // Stop the video when the component unmounts or the user navigates away
+  // Stop the video when the component unmounts
   useEffect(() => {
     return () => {
-      stopVideo(); // Cleanup on unmount
+      stopVideo();
     };
   }, []);
 
-  // Reset states for recapture and reverify
+  // Reset states for recapture
   const handleRecapture = () => {
     setIdentifiedPerson(null);
     setMessage("");
-    setPersonsIdentified([]);
     setShowRecapture(false);
     setShowReverify(false);
     setIsAuthenticating(false);
@@ -182,7 +243,6 @@ const Authentication = () => {
   const handleReverify = () => {
     setMessage("");
     setIdentifiedPerson(null);
-    setPersonsIdentified([]);
     setShowRecapture(false);
     setShowReverify(false);
     setIsAuthenticating(false);
@@ -191,8 +251,8 @@ const Authentication = () => {
 
   // Handle Back Button Click
   const handleBack = () => {
-    stopVideo(); // Ensure video stops when navigating back
-    navigate("/Dashboard"); // Navigate back to the dashboard
+    stopVideo();
+    navigate("/Dashboard");
   };
 
   return (
@@ -217,12 +277,18 @@ const Authentication = () => {
                 muted
                 className="auth-video"
               />
+              {isLoading && (
+                <div className="loading-overlay">
+                  <div className="loading-spinner"></div>
+                  <p>Processing...</p>
+                </div>
+              )}
             </div>
 
             <div className="auth-buttons">
               <button
                 onClick={startAuthentication}
-                disabled={isAuthenticating}
+                disabled={isAuthenticating && !showRecapture && !showReverify}
                 className="auth-btn auth-btn-success"
               >
                 Start Authentication
@@ -231,6 +297,7 @@ const Authentication = () => {
                 <button
                   onClick={handleRecapture}
                   className="auth-btn auth-btn-warning"
+                  disabled={isLoading}
                 >
                   Recapture
                 </button>
@@ -239,6 +306,7 @@ const Authentication = () => {
                 <button
                   onClick={handleReverify}
                   className="auth-btn auth-btn-info"
+                  disabled={isLoading}
                 >
                   Reverify
                 </button>

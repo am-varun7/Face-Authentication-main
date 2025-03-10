@@ -1,38 +1,32 @@
-const express = require('express')
-const router = express.Router()
-const axios = require('axios');
+const express = require('express');
+const router = express.Router();
 const FaceEmbedding = require('../models/FaceSchema');
 const FaceEmbeddingCNN = require('../models/FaceSchemaCNN');
 const fetchuser = require('../middleware/fetchuser');
 const VerificationData = require('../models/VerificationData');
 
-
-// Register Face - Calls Python service to generate embedding, then saves it in MongoDB
+// Register Face - Handles both new registrations and updates
 router.post('/register-face', fetchuser, async (req, res) => {
     try {
-        console.log(req.body);
+        console.log("Register face request received:", req.body);
         const { name, roll_no, embeddings } = req.body;
 
-        // Ensure that name and embeddings are provided
+        // Validation
         if (!name || !embeddings) {
             return res.status(400).json({ error: "Name and embedding are required" });
         }
 
-        // Ensure embeddings is a 2D array
         if (!Array.isArray(embeddings) || !embeddings.every(Array.isArray)) {
             return res.status(400).json({ error: "Embeddings must be a 2D array" });
         }
 
         // Check if the roll_no already exists in the database
-        const existingUser = await FaceEmbedding.findOne({ roll_no });
-        if (existingUser) {
-            return res.status(400).json({ error: "A user with this roll number is already registered" });
-        }
+        const existingUser = await FaceEmbedding.findOne({ roll_no, user: req.user.id });
 
         // Calculate the average embedding
         const numEmbeddings = embeddings.length;
         console.log("Number of embeddings received: ", numEmbeddings);
-        const numDimensions = embeddings[0].length; // Assuming all embeddings have the same length
+        const numDimensions = embeddings[0].length;
         console.log("Number of Dimensions: ", numDimensions);
 
         // Initialize an array to hold the sum of each dimension
@@ -46,53 +40,68 @@ router.post('/register-face', fetchuser, async (req, res) => {
         // Calculate the averaged embedding
         const averagedEmbedding = sumEmbeddings.map(value => value / numEmbeddings);
 
+        // Update or create document
+        if (existingUser) {
+            // Update the existing user
+            console.log(`Updating existing user: ${name} with roll_no: ${roll_no}`);
+            const updatedUser = await FaceEmbedding.findOneAndUpdate(
+                { roll_no, user: req.user.id },
+                { 
+                    name,
+                    embedding: averagedEmbedding
+                },
+                { new: true }
+            );
+            
+            return res.status(200).json({ 
+                message: "Face data updated successfully!",
+                updated: true,
+                details: { name: updatedUser.name, roll_no: updatedUser.roll_no }
+            });
+            
+        }
+
         // Create a new FaceEmbedding document with the averaged embedding
         const newFace = new FaceEmbedding({
-            user: req.user.id, // Link embedding to logged-in user
+            user: req.user.id,
             name,
             roll_no,
-            embedding: averagedEmbedding, // Store the averaged embedding
+            embedding: averagedEmbedding,
         });
 
-        console.log(averagedEmbedding);
-
-        // Save the new face embedding to the database
         await newFace.save();
-        res.status(200).json({ message: "Face registered successfully!" });
+        console.log(`New face registered: ${name} with roll_no: ${roll_no}`);
+        res.status(201).json({ 
+            message: "Face registered successfully!",
+            details: { name, roll_no }
+        });
     } catch (error) {
-        console.error("Error storing embedding:", error.message);
-        res.status(500).send("Internal Server Error");
+        console.error("Error storing embedding:", error);
+        res.status(500).json({ error: "Internal Server Error", details: error.message });
     }
 });
 
 router.post('/register-face-cnn', fetchuser, async (req, res) => {
     try {
-        console.log(req.body);
+        console.log("Register CNN face request received:", req.body);
         const { name, roll_no, embeddings } = req.body;
 
-        // Ensure that name and embeddings are provided
+        // Validation
         if (!name || !embeddings) {
             return res.status(400).json({ error: "Name and embedding are required" });
         }
 
-        // Ensure embeddings is a 2D array
         if (!Array.isArray(embeddings) || !embeddings.every(Array.isArray)) {
             return res.status(400).json({ error: "Embeddings must be a 2D array" });
         }
 
-        // Check if the roll_no already exists in the FaceEmbeddingCNN collection
-        const existingUser = await FaceEmbeddingCNN.findOne({ roll_no });
-        if (existingUser) {
-            return res.status(400).json({ error: "A user with this roll number is already registered" });
-        }
+        // Check if the roll_no already exists
+        const existingUser = await FaceEmbeddingCNN.findOne({ roll_no, user: req.user.id });
 
-        // Calculate the average of the embeddings
+        // Calculate the average embedding
         const numEmbeddings = embeddings.length;
-        console.log("Number of embeddings received: ", numEmbeddings);
-        const numDimensions = embeddings[0].length; // Assuming all embeddings have the same length
-        console.log("Number of Dimensions: ", numDimensions);
-
-        // Initialize an array to hold the sum of each dimension
+        const numDimensions = embeddings[0].length;
+        
         const sumEmbeddings = new Array(numDimensions).fill(0);
         for (const embedding of embeddings) {
             for (let i = 0; i < numDimensions; i++) {
@@ -100,98 +109,55 @@ router.post('/register-face-cnn', fetchuser, async (req, res) => {
             }
         }
 
-        // Calculate the averaged embedding
         const averagedEmbedding = sumEmbeddings.map(value => value / numEmbeddings);
 
-        // Create a new FaceEmbeddingCNN document with the averaged embedding
+        // Update or create
+        if (existingUser) {
+            console.log(`Updating existing CNN user: ${name} with roll_no: ${roll_no}`);
+            const updatedUser = await FaceEmbeddingCNN.findOneAndUpdate(
+                { roll_no, user: req.user.id },
+                { 
+                    name,
+                    embedding: averagedEmbedding
+                },
+                { new: true }
+            );
+            
+            return res.status(200).json({ 
+                message: "Face data updated successfully!",
+                updated: true,
+                details: { name: updatedUser.name, roll_no: updatedUser.roll_no }
+            });
+        }
+
+        // Create new record
         const newFace = new FaceEmbeddingCNN({
-            user: req.user.id, // Link embedding to logged-in user
+            user: req.user.id,
             name,
             roll_no,
-            embedding: averagedEmbedding, // Store the averaged embedding
+            embedding: averagedEmbedding,
         });
 
-        console.log(averagedEmbedding);
-
-        // Save the new face embedding to the database
         await newFace.save();
-        res.status(200).json({ message: "Face registered successfully!" });
+        console.log(`New CNN face registered: ${name} with roll_no: ${roll_no}`);
+        res.status(201).json({ 
+            message: "Face registered successfully!",
+            details: { name, roll_no }
+        });
     } catch (error) {
-        console.error("Error storing embedding:", error.message);
-        res.status(500).send("Internal Server Error");
+        console.error("Error storing CNN embedding:", error);
+        res.status(500).json({ error: "Internal Server Error", details: error.message });
     }
 });
 
-
+// Authenticate a face
 router.post('/authenticate', fetchuser, async (req, res) => {
     try {
-        const { embedding } = req.body; // Receiving embedding from frontend
-        console.log("Received embedding from Frontend");
-        console.log("Received Embedding:", embedding);
-
-        if (!embedding || embedding.length === 0) {
-            return res.status(400).json({ error: "Embedding is required for authentication" });
-        }
-
-        // Step 1: Fetch all stored embeddings for the logged-in user
-        const storedFaces = await FaceEmbedding.find({ user: req.user.id });
-
-        if (storedFaces.length === 0) {
-            return res.status(404).json({ message: "No registered faces found for authentication" });
-        }
-
-        // Step 2: Compare the received embedding with stored embeddings
-        let bestMatch = null;
-        let minDistance = Infinity;
-
-        for (const face of storedFaces) {
-            const storedEmbedding = face.embedding;
+        const { embedding } = req.body;
+        console.log("Authentication request received");
         
-            if (embedding.length !== storedEmbedding.length) {
-                console.error(`Mismatched lengths: received=${embedding.length}, stored=${storedEmbedding.length}`);
-                continue; // Skip this face
-            }
-        
-            // Calculate distance only if lengths match
-            const distance = Math.sqrt(
-                embedding.reduce((sum, value, idx) => sum + Math.pow(value - storedEmbedding[idx], 2), 0)
-            );
-            console.log(`Distance to ${face.name}: ${distance}`);
-        
-        
-            
-            if (distance < minDistance) {
-                minDistance = distance;
-                bestMatch = face;
-            }
-        }
-        
-
-        // Step 3: Decide match threshold (adjust this based on testing)
-        const threshold = 0.75; // Set an appropriate threshold based on your model's performance
-        if (minDistance <= threshold && bestMatch) {
-            return res.status(200).json({
-                message: "Person identified successfully",
-                name: bestMatch.name,
-                roll_no: bestMatch.roll_no,
-                details: bestMatch, // Include any other stored details
-            });
-        } else {
-            return res.status(200).json({ message: "No match found" });
-        }
-    } catch (error) {
-        console.error("Error during authentication:", error.message);
-        res.status(500).send("Internal Server Error");
-    }
-});
-router.post('/groupauthenticate', fetchuser, async (req, res) => {
-    try {
-        const { embeddings } = req.body; // Accept multiple embeddings
-        console.log("Received embeddings from Frontend");
-        console.log("Number of embeddings received:", embeddings.length);
-
-        if (!embeddings || embeddings.length === 0) {
-            return res.status(400).json({ error: "Embeddings are required for authentication" });
+        if (!embedding || !Array.isArray(embedding) || embedding.length === 0) {
+            return res.status(400).json({ error: "Valid embedding is required for authentication" });
         }
 
         // Fetch all stored embeddings for the logged-in user
@@ -201,19 +167,152 @@ router.post('/groupauthenticate', fetchuser, async (req, res) => {
             return res.status(404).json({ message: "No registered faces found for authentication" });
         }
 
-        const threshold = 0.75; // Match threshold
-        const results = []; // To store results for all embeddings
+        // Compare the received embedding with stored embeddings
+        let bestMatch = null;
+        let minDistance = Infinity;
 
-        embeddings.forEach((embedding) => {
+        for (const face of storedFaces) {
+            const storedEmbedding = face.embedding;
+        
+            if (embedding.length !== storedEmbedding.length) {
+                console.error(`Mismatched embedding lengths: received=${embedding.length}, stored=${storedEmbedding.length}`);
+                continue; // Skip this face
+            }
+        
+            // Calculate Euclidean distance
+            const distance = Math.sqrt(
+                embedding.reduce((sum, value, idx) => sum + Math.pow(value - storedEmbedding[idx], 2), 0)
+            );
+            console.log(`Distance to ${face.name}: ${distance}`);
+            
+            if (distance < minDistance) {
+                minDistance = distance;
+                bestMatch = face;
+            }
+        }
+        
+        // Decide match based on threshold
+        const threshold = 0.75; // Adjust based on testing
+        if (minDistance <= threshold && bestMatch) {
+            console.log(`Successful match: ${bestMatch.name} with distance ${minDistance}`);
+            return res.status(200).json({
+                message: "Person identified successfully",
+                name: bestMatch.name,
+                roll_no: bestMatch.roll_no,
+                distance: minDistance,
+                confidence: (1 - minDistance/threshold) * 100
+            });
+        } else {
+            console.log(`No match found. Best distance was ${minDistance}`);
+            return res.status(200).json({ 
+                message: "No match found",
+                bestDistance: minDistance,
+                threshold: threshold
+            });
+        }
+    } catch (error) {
+        console.error("Error during authentication:", error);
+        res.status(500).json({ error: "Internal Server Error", details: error.message });
+    }
+});
+
+router.post('/authenticate-cnn', fetchuser, async (req, res) => {
+    try {
+        const { embedding } = req.body;
+        console.log("CNN Authentication request received");
+        
+        if (!embedding || !Array.isArray(embedding) || embedding.length === 0) {
+            return res.status(400).json({ error: "Valid embedding is required for authentication" });
+        }
+
+        // Fetch all stored CNN embeddings for the logged-in user
+        const storedFaces = await FaceEmbeddingCNN.find({ user: req.user.id });
+
+        if (storedFaces.length === 0) {
+            return res.status(404).json({ message: "No registered CNN faces found for authentication" });
+        }
+
+        // Compare the received embedding with stored embeddings
+        let bestMatch = null;
+        let minDistance = Infinity;
+
+        for (const face of storedFaces) {
+            const storedEmbedding = face.embedding;
+        
+            if (embedding.length !== storedEmbedding.length) {
+                console.error(`Mismatched CNN embedding lengths: received=${embedding.length}, stored=${storedEmbedding.length}`);
+                continue; // Skip this face
+            }
+        
+            // Calculate Euclidean distance
+            const distance = Math.sqrt(
+                embedding.reduce((sum, value, idx) => sum + Math.pow(value - storedEmbedding[idx], 2), 0)
+            );
+            console.log(`CNN Distance to ${face.name}: ${distance}`);
+            
+            if (distance < minDistance) {
+                minDistance = distance;
+                bestMatch = face;
+            }
+        }
+        
+        // Decide match based on threshold
+        const threshold = 0.75; // Adjust based on testing
+        if (minDistance <= threshold && bestMatch) {
+            console.log(`Successful CNN match: ${bestMatch.name} with distance ${minDistance}`);
+            return res.status(200).json({
+                message: "Person identified successfully",
+                name: bestMatch.name,
+                roll_no: bestMatch.roll_no,
+                distance: minDistance,
+                confidence: (1 - minDistance/threshold) * 100
+            });
+        } else {
+            console.log(`No CNN match found. Best distance was ${minDistance}`);
+            return res.status(200).json({ 
+                message: "No match found",
+                bestDistance: minDistance,
+                threshold: threshold
+            });
+        }
+    } catch (error) {
+        console.error("Error during CNN authentication:", error);
+        res.status(500).json({ error: "Internal Server Error", details: error.message });
+    }
+});
+
+// Group authentication for multiple faces
+router.post('/groupauthenticate', fetchuser, async (req, res) => {
+    try {
+        const { embeddings } = req.body;
+        console.log("Group authentication request received:", embeddings.length, "embeddings");
+
+        if (!embeddings || !Array.isArray(embeddings) || embeddings.length === 0) {
+            return res.status(400).json({ error: "Valid embeddings are required for group authentication" });
+        }
+
+        // Fetch all stored embeddings for the logged-in user
+        const storedFaces = await FaceEmbedding.find({ user: req.user.id });
+
+        if (storedFaces.length === 0) {
+            return res.status(404).json({ message: "No registered faces found for authentication" });
+        }
+
+        const threshold = 0.75;
+        const results = [];
+
+        // Process each embedding
+        for (const embedding of embeddings) {
             let bestMatch = null;
             let minDistance = Infinity;
 
-            storedFaces.forEach((face) => {
+            // Compare against all stored faces
+            for (const face of storedFaces) {
                 const storedEmbedding = face.embedding;
 
                 if (embedding.length !== storedEmbedding.length) {
-                    console.error(`Mismatched lengths: received=${embedding.length}, stored=${storedEmbedding.length}`);
-                    return; // Skip this face
+                    console.error(`Mismatched embedding lengths in group auth: received=${embedding.length}, stored=${storedEmbedding.length}`);
+                    continue;
                 }
 
                 const distance = Math.sqrt(
@@ -224,119 +323,68 @@ router.post('/groupauthenticate', fetchuser, async (req, res) => {
                     minDistance = distance;
                     bestMatch = face;
                 }
-            });
+            }
 
+            // Add result for this embedding
             if (minDistance <= threshold && bestMatch) {
                 results.push({
                     match: true,
                     name: bestMatch.name,
                     roll_no: bestMatch.roll_no,
+                    distance: minDistance,
+                    confidence: (1 - minDistance/threshold) * 100
                 });
             } else {
-                results.push({ match: false, message: "No match found" });
+                results.push({ 
+                    match: false, 
+                    message: "No match found",
+                    bestDistance: minDistance
+                });
             }
-        });
+        }
 
         return res.status(200).json({ results });
     } catch (error) {
-        console.error("Error during authentication:", error.message);
-        res.status(500).send("Internal Server Error");
+        console.error("Error during group authentication:", error);
+        res.status(500).json({ error: "Internal Server Error", details: error.message });
     }
 });
 
-router.post('/authenticate-cnn', fetchuser, async (req, res) => {
-    try {
-        const { embedding } = req.body; // Receiving embedding from frontend
-        console.log("Received embedding from Frontend");
-        console.log("Received Embedding:", embedding);
-
-        if (!embedding || embedding.length === 0) {
-            return res.status(400).json({ error: "Embedding is required for authentication" });
-        }
-
-        // Step 1: Fetch all stored embeddings for the logged-in user
-        const storedFaces = await FaceEmbeddingCNN.find({ user: req.user.id });
-
-        if (storedFaces.length === 0) {
-            return res.status(404).json({ message: "No registered faces found for authentication" });
-        }
-
-        // Step 2: Compare the received embedding with stored embeddings
-        let bestMatch = null;
-        let minDistance = Infinity;
-
-        for (const face of storedFaces) {
-            const storedEmbedding = face.embedding;
-        
-            if (embedding.length !== storedEmbedding.length) {
-                console.error(`Mismatched lengths: received=${embedding.length}, stored=${storedEmbedding.length}`);
-                continue; // Skip this face
-            }
-        
-            // Calculate distance only if lengths match
-            const distance = Math.sqrt(
-                embedding.reduce((sum, value, idx) => sum + Math.pow(value - storedEmbedding[idx], 2), 0)
-            );
-            console.log(`Distance to ${face.name}: ${distance}`);
-        
-        
-            
-            if (distance < minDistance) {
-                minDistance = distance;
-                bestMatch = face;
-            }
-        }
-        
-
-        // Step 3: Decide match threshold (adjust this based on testing)
-        const threshold = 0.75; // Set an appropriate threshold based on your model's performance
-        if (minDistance <= threshold && bestMatch) {
-            return res.status(200).json({
-                message: "Person identified successfully",
-                name: bestMatch.name,
-                roll_no: bestMatch.roll_no,
-                details: bestMatch, // Include any other stored details
-            });
-        } else {
-            return res.status(200).json({ message: "No match found" });
-        }
-    } catch (error) {
-        console.error("Error during authentication:", error.message);
-        res.status(500).send("Internal Server Error");
-    }
-});
-
+// Delete face labels
 router.delete('/delete-labels/:label', fetchuser, async (req, res) => {
     try {
         const name = req.params.label;
         const modelType = req.query['model-type'];
-        console.log('DELETE request received for label:', name, 'ModelType: ', modelType);
+        console.log('DELETE request received for label:', name, 'ModelType:', modelType);
 
-        if (!name || !modelType) {
-            return res.status(400).json({ error: 'Label & ModelType parameters are required' });
+        if (!name) {
+            return res.status(400).json({ error: 'Label parameter is required' });
         }
 
-        if(modelType==='CNN') {
+        let result;
+        
+        if (!modelType || modelType === 'PTM') {
             result = await FaceEmbedding.deleteOne({ user: req.user.id, name });
-        } else if (modelType==='PTM') {
+            console.log('PTM delete operation result:', result);
+        } else if (modelType === 'CNN') {
             result = await FaceEmbeddingCNN.deleteOne({ user: req.user.id, name });
+            console.log('CNN delete operation result:', result);
         } else {
-            return res.status(400).json({ error: 'Invalid Model Type'});
+            return res.status(400).json({ error: 'Invalid Model Type' });
         }
         
-        console.log('Delete operation result:', result);
-
         if (result.deletedCount === 0) {
             return res.status(404).json({ error: 'Label not found or already deleted' });
         }
 
         res.json({ message: 'Label removed successfully' });
     } catch (error) {
-        console.error('Error deleting label:', error.message);
-        res.status(500).json({ error: 'An internal server error occurred while deleting the label' });
+        console.error('Error deleting label:', error);
+        res.status(500).json({ error: 'An internal server error occurred', details: error.message });
     }
 });
 
+// Store verification data
 router.post('/store-verification', fetchuser, async (req, res) => {
     try {
         const { labelName } = req.body;
@@ -358,7 +406,11 @@ router.post('/store-verification', fetchuser, async (req, res) => {
         });
 
         if (existingVerification) {
-            return res.status(400).json({ message: 'Already verified recently.' });
+            return res.status(200).json({ 
+                message: 'Already verified today.',
+                verified: true,
+                time: existingVerification.createdAt
+            });
         }
 
         // Store new verification
@@ -368,32 +420,48 @@ router.post('/store-verification', fetchuser, async (req, res) => {
         });
 
         await verification.save();
-        res.status(201).json({ message: 'Verification data stored successfully.' });
+        res.status(201).json({ 
+            message: 'Verification data stored successfully.',
+            verified: true,
+            time: verification.createdAt
+        });
     } catch (error) {
         console.error('Error storing verification data:', error);
-        res.status(500).json({ message: 'Failed to store verification data.' });
+        res.status(500).json({ 
+            message: 'Failed to store verification data.',
+            error: error.message
+        });
     }
 });
 
+// Get verification history
 router.get('/verification-history', fetchuser, async (req, res) => {
     try {
-        const user = req.user.id; // Assuming middleware sets req.user
-        const history = await VerificationData.find({ user });
+        const user = req.user.id;
+        
+        // Optional date filtering
+        const { startDate, endDate } = req.query;
+        let dateFilter = {};
+        
+        if (startDate && endDate) {
+            dateFilter = {
+                createdAt: {
+                    $gte: new Date(startDate),
+                    $lte: new Date(endDate)
+                }
+            };
+        }
+        
+        const history = await VerificationData.find({ 
+            user,
+            ...dateFilter
+        }).sort({ createdAt: -1 }); // Most recent first
+        
         res.json({ history });
     } catch (error) {
         console.error('Error fetching verification history:', error);
-        res.status(500).json({ message: 'Server error' });
+        res.status(500).json({ message: 'Server error', details: error.message });
     }
 });
 
-
 module.exports = router;
-
-
-
-
-
-
-
-
-

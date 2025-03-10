@@ -133,24 +133,20 @@
 
 /* Responsive Styles */
 @media (max-width: 768px) {
-  /* Adjust login container for smaller screens */
   .facerecs-login-container {
-    width: 90%; /* 90% width for smaller screens */
+    width: 90%; 
     padding: 20px;
   }
 
-  /* Reduce font size for heading */
   .facerecs-login-heading {
     font-size: 1.8rem;
   }
 
-  /* Adjust form input padding and font size */
   .facerecs-form-input {
     padding: 10px;
     font-size: 0.9rem;
   }
 
-  /* Adjust button size */
   .facerecs-btn {
     padding: 10px;
     font-size: 1rem;

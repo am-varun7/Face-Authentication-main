@@ -1,3 +1,47 @@
+/* Import both Kumbh Sans for general text and Orbitron for headings */
+@import url('https://fonts.googleapis.com/css2?family=Kumbh+Sans:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700&display=swap');
+
+
+
+
+/* Font fallbacks definition */
+@font-face {
+  font-family: 'Kumbh Sans';
+  src: local('Kumbh Sans'), url('https://fonts.gstatic.com/s/kumbhsans/v20/c4mP1n92AsfhuCq6tVsaoIx1LQICk0boNoq0SjlDfnzKo-bF3mdQkZcB.woff2') format('woff2');
+  font-weight: 300 700;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Orbitron';
+  src: local('Orbitron'), url('https://fonts.gstatic.com/s/orbitron/v29/yMJMMIlzdpvBhQQL_SC3X9yhF25-T1nyKS6BoWgz.woff2') format('woff2');
+  font-weight: 400 700;
+  font-display: swap;
+}
+
+/* Reset styles with higher specificity - but exclude h1 */
+html, body, #root, #app, .App, div, p, h2, h3, h4, h5, h6, 
+button, input, select, textarea, a, span, li, ul, ol {
+  font-family: 'Kumbh Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif !important;
+}
+
+/* Allow h1 to have its own styling */
+h1.orbitron, .orbitron {
+  font-family: 'Orbitron', sans-serif !important;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body, html, #root {
+  width: 100%;
+  height: 100%;
+}
+
 .App {
   text-align: center;
 }

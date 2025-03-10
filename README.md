@@ -73,14 +73,19 @@ This project is a **Face Authentication System** designed for secure user authen
    cd face-authentication
    ```
 
-2. **Setup Backend**:
+2. **Setup Frontend**:
+   ```bash
+   npm install
+   npm start
+   ```
+
+3. **Setup Backend**:
    ```bash
    cd backend
-   npm install
    node index.js
    ```
 
-3. **Setup Python Microservice**:
+4. **Setup Python Microservice**:
 ```bash
   cd backend
   python face_auth.py
@@ -110,7 +115,7 @@ Install all the required modules
    - Verify multiple individuals and export their details.
 
 5. **Crowd Analysis**:
-   - Detect and count faces in a crowd.
+   - Detect and count faces in a crowd from an image or a video.
 
 ---
 

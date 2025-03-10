@@ -77,9 +77,9 @@ const Dashboard = () => {
                         </div>
                     )}
                     <div className="home_hero_section">
-                        <h1>Live Face Authentication</h1>
+                        <h1 style={{fontFamily: "monospace"}}>Live Face Authentication</h1>
                         <p className="hero-description">
-                            Experience the future of Face Recognition and Authentication with real-time face recognition technology. Secure and accurate, designed for individuals, groups, and large gatherings.
+                            Experience the future of Face Recognition and Authentication with real-time face recognition technology. Securely and accurately designed for individuals, groups, and large crowd gatherings.
                         </p>
                         <div className="cta-buttons">
                             <button className="home-button" onClick={handleLearnMore}>Learn More</button>

@@ -4,10 +4,11 @@ const styles = {
         maxWidth: '600px',
         margin: '20px auto',
         padding: '20px',
-        backgroundColor: '#fff',
+        // backgroundColor: '#fff',
         boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
         borderRadius: '10px',
         marginTop: '90px',
+        backgroundImage: `url('../images/authenticatebg.avif')`
     },
     profileTitle: {
         fontSize: '24px',
